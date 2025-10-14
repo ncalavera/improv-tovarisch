@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getFormatById } from '@/lib/formats'
+import type { FormatCategory } from '@/lib/format-types'
+import { isStructuredFormat, isWarmup } from '@/lib/format-types'
 import { Collapsible } from '@/components/ui/collapsible'
 
 // Convert markdown bold and italic to HTML
@@ -31,6 +33,16 @@ export default async function FormatPage({
   // Determine if format has extended data
   const isHarold = id === 'harold'
   const isArmando = id === 'armando'
+  const isWarmupFormat = isWarmup(format)
+  const categoryLabels: Record<FormatCategory, string> = {
+    'long-form': 'Длинная форма',
+    'short-form': 'Короткая форма',
+    warmup: 'Разминка',
+  }
+
+  const shortDescription = isWarmupFormat
+    ? format.shortDescription ?? format.fullDescription ?? format.description
+    : format.shortDescription
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -62,49 +74,76 @@ export default async function FormatPage({
             <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
               🌀 {format.name}
             </h1>
-            <span
-              className={`text-sm font-semibold px-3 py-1 rounded-full ${
-                format.difficulty === 'beginner'
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : format.difficulty === 'intermediate'
-                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-              }`}
-            >
-              {format.difficulty === 'beginner' && 'Начальный'}
-              {format.difficulty === 'intermediate' && 'Средний'}
-              {format.difficulty === 'advanced' && 'Продвинутый'}
-            </span>
+            <div className="flex flex-wrap gap-2 justify-end">
+              <span className="text-sm font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
+                {categoryLabels[format.formCategory]}
+              </span>
+              {isWarmupFormat ? (
+                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/70 dark:text-orange-200">
+                  🎯 {format.warmupType}
+                </span>
+              ) : (
+                <>
+                  {format.explored && (
+                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                      ⭐ Детально изучено
+                    </span>
+                  )}
+                  {'authorTag' in format && format.authorTag && (
+                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      👤 {format.authorTag}
+                    </span>
+                  )}
+                </>
+              )}
+            </div>
           </div>
 
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
-            {format.shortDescription}
-          </p>
+          {shortDescription && (
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
+              {shortDescription}
+            </p>
+          )}
 
           {/* Meta Info */}
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">👥</span>
-              <div>
-                <p className="text-gray-500 dark:text-gray-400">Игроки</p>
-                <p className="font-semibold text-gray-900 dark:text-gray-100">
-                  {format.minPlayers}–{format.maxPlayers} человек
-                  {isHarold && ' (оптимально 8)'}
-                </p>
+          {isStructuredFormat(format) ? (
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">👥</span>
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Игроки</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">
+                    {format.minPlayers}–{format.maxPlayers} человек
+                    {isHarold && ' (оптимально 8)'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">⏱️</span>
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Длительность</p>
+                  <p className="font-semibold text-gray-900 dark:text-gray-100">
+                    {format.duration}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">⏱️</span>
-              <div>
-                <p className="text-gray-500 dark:text-gray-400">Длительность</p>
-                <p className="font-semibold text-gray-900 dark:text-gray-100">
-                  {format.duration}
-                </p>
-              </div>
+          ) : (
+            <div className="text-sm text-gray-600 dark:text-gray-300">
+              <p>Тип разминки: {format.warmupType}</p>
             </div>
-          </div>
+          )}
         </div>
 
+        {isWarmupFormat ? (
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Описание</h2>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+              {format.description}
+            </p>
+          </div>
+        ) : (
+          <>
         {/* Description */}
         <Collapsible title="Описание" icon="📖" defaultOpen={true}>
           <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-3">
@@ -675,6 +714,8 @@ export default async function FormatPage({
               {format.notes}
             </p>
           </Collapsible>
+        )}
+          </>
         )}
       </main>
     </div>

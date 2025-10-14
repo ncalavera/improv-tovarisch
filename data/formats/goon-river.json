@@ -15,11 +15,17 @@
     }
   ],
   "montageRules": "Монологи могут чередоваться или следовать друг за другом. Каждый дух уникален.",
-  "skills": ["монолог", "storytelling", "характер", "эмоциональность"],
+  "skills": [
+    "монолог",
+    "storytelling",
+    "характер",
+    "эмоциональность"
+  ],
   "focus": "Создание богатых историй жизни через монологи",
   "variations": [],
   "prerequisites": [],
   "similarTo": [],
   "sourceVideos": [],
-  "notes": "Основан на 'Spoon River Anthology'. Фокус на поэтичности и жизненных историях."
+  "notes": "Основан на 'Spoon River Anthology'. Фокус на поэтичности и жизненных историях.",
+  "formCategory": "long-form"
 }

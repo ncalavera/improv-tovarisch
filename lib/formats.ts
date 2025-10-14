@@ -1,61 +1,11 @@
 import fs from 'fs'
 import path from 'path'
 
-export interface Format {
-  id: string
-  name: string
-  explored?: boolean
-  authorTag?: string
-  shortDescription: string
-  fullDescription: string
-  minPlayers: number
-  maxPlayers: number
-  duration: string
-  difficulty: 'beginner' | 'intermediate' | 'advanced'
-  components: Array<{
-    name: string
-    description: string
-    duration?: string
-  }>
-  montageRules?: string
-  skills: string[]
-  focus: string
-  variations: string[]
-  prerequisites: string[]
-  similarTo: string[]
-  sourceVideos: string[]
-  notes?: string
-  // Extended data fields (for formats like Harold and Armando)
-  openings?: Array<{
-    name: string
-    description: string
-    howItWorks: string
-    example: string
-    result: string
-  }>
-  keyRules?: string[]
-  example?: any
-  resources?: {
-    videos?: Array<{
-      title: string
-      url: string
-      lang?: string
-      description: string
-    }>
-    books?: Array<{
-      title: string
-      authors: string
-      year: number | null
-      description: string
-      url: string
-    }>
-    links?: Array<{
-      title: string
-      url: string
-      description: string
-    }>
-  }
-}
+import type { Format, FormatCategory, StructuredFormat, WarmupFormat } from './format-types'
+import { isStructuredFormat, isWarmup } from './format-types'
+
+export type { Format, FormatCategory, StructuredFormat, WarmupFormat } from './format-types'
+export { isStructuredFormat, isWarmup } from './format-types'
 
 const FORMATS_DIR = path.join(process.cwd(), 'data', 'formats')
 
@@ -71,13 +21,18 @@ export function getFormats(): Format[] {
     })
     // Sort by explored status (explored first), then by authorTag (Ivan Maska second), then alphabetically by name
     return formats.sort((a, b) => {
-      // Explored formats (Harold, Armando) come first
-      if (a.explored && !b.explored && !b.authorTag) return -1
-      if (!a.explored && !a.authorTag && b.explored) return 1
+      if (isStructuredFormat(a) && isStructuredFormat(b)) {
+        // Explored formats (Harold, Armando) come first
+        if (a.explored && !b.explored && !b.authorTag) return -1
+        if (!a.explored && !a.authorTag && b.explored) return 1
 
-      // Formats with authorTag (Ivan Maska) come second
-      if ((a.explored || a.authorTag) && !b.explored && !b.authorTag) return -1
-      if (!a.explored && !a.authorTag && (b.explored || b.authorTag)) return 1
+        // Formats with authorTag (Ivan Maska) come second
+        if ((a.explored || a.authorTag) && !b.explored && !b.authorTag) return -1
+        if (!a.explored && !a.authorTag && (b.explored || b.authorTag)) return 1
+      }
+
+      if (isStructuredFormat(a) && isWarmup(b)) return -1
+      if (isWarmup(a) && isStructuredFormat(b)) return 1
 
       // Within same group, sort alphabetically
       return a.name.localeCompare(b.name, 'ru')
@@ -113,20 +68,20 @@ export function filterFormats(filters: {
   let formats = getFormats()
 
   if (filters.difficulty) {
-    formats = formats.filter(f => f.difficulty === filters.difficulty)
+    formats = formats.filter(f => isStructuredFormat(f) && f.difficulty === filters.difficulty)
   }
 
   if (filters.minPlayers) {
-    formats = formats.filter(f => f.maxPlayers >= filters.minPlayers!)
+    formats = formats.filter(f => isStructuredFormat(f) && f.maxPlayers >= filters.minPlayers!)
   }
 
   if (filters.maxPlayers) {
-    formats = formats.filter(f => f.minPlayers <= filters.maxPlayers!)
+    formats = formats.filter(f => isStructuredFormat(f) && f.minPlayers <= filters.maxPlayers!)
   }
 
   if (filters.skills && filters.skills.length > 0) {
     formats = formats.filter(f =>
-      filters.skills!.some(skill => f.skills.includes(skill))
+      isStructuredFormat(f) && filters.skills!.some(skill => f.skills.includes(skill))
     )
   }
 

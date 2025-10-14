@@ -8,14 +8,30 @@
   "duration": "25-30 минут",
   "difficulty": "advanced",
   "components": [
-    {"name": "Единая сцена", "description": "Harold структура в monoscene", "duration": "25-30 минут"}
+    {
+      "name": "Единая сцена",
+      "description": "Harold структура в monoscene",
+      "duration": "25-30 минут"
+    }
   ],
   "montageRules": "Структура Harold сохраняется, но без переключений сцен. Одна локация, одни персонажи.",
-  "skills": ["структура-Harold", "терпение-monoscene", "развитие-отношений", "выносливость"],
+  "skills": [
+    "структура-Harold",
+    "терпение-monoscene",
+    "развитие-отношений",
+    "выносливость"
+  ],
   "focus": "Объединение структуры Harold с глубиной monoscene",
-  "variations": ["harold", "lotus"],
+  "variations": [
+    "harold",
+    "lotus"
+  ],
   "prerequisites": [],
-  "similarTo": ["harold", "lotus"],
+  "similarTo": [
+    "harold",
+    "lotus"
+  ],
   "sourceVideos": [],
-  "notes": "Очень сложная гибридная форма для опытных импровизаторов."
+  "notes": "Очень сложная гибридная форма для опытных импровизаторов.",
+  "formCategory": "long-form"
 }

@@ -8,14 +8,26 @@
   "duration": "20-25 минут",
   "difficulty": "intermediate",
   "components": [
-    {"name": "Цепочка сцен", "description": "Сцены связаны уходящими персонажами", "duration": "20-25 минут"}
+    {
+      "name": "Цепочка сцен",
+      "description": "Сцены связаны уходящими персонажами",
+      "duration": "20-25 минут"
+    }
   ],
   "montageRules": "Органичные переходы через уход персонажа. Создаёт поток.",
-  "skills": ["органичные-переходы", "tag-outs", "связность-мира", "текучесть"],
+  "skills": [
+    "органичные-переходы",
+    "tag-outs",
+    "связность-мира",
+    "текучесть"
+  ],
   "focus": "Создание плавного потока сцен",
   "variations": [],
   "prerequisites": [],
-  "similarTo": ["slacker"],
+  "similarTo": [
+    "slacker"
+  ],
   "sourceVideos": [],
-  "notes": "Основа для формата Slacker."
+  "notes": "Основа для формата Slacker.",
+  "formCategory": "long-form"
 }

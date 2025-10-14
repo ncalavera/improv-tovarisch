@@ -8,14 +8,28 @@
   "duration": "20-25 минут",
   "difficulty": "intermediate",
   "components": [
-    {"name": "Поэтичные монологи", "description": "Духи рассказывают истории", "duration": "20-25 минут"}
+    {
+      "name": "Поэтичные монологи",
+      "description": "Духи рассказывают истории",
+      "duration": "20-25 минут"
+    }
   ],
   "montageRules": "Монологи более литературны и поэтичны чем в обычном Goon River.",
-  "skills": ["монолог", "поэтичность", "литературность", "эмоциональность"],
+  "skills": [
+    "монолог",
+    "поэтичность",
+    "литературность",
+    "эмоциональность"
+  ],
   "focus": "Создание поэтичных жизненных историй",
-  "variations": ["goon-river"],
+  "variations": [
+    "goon-river"
+  ],
   "prerequisites": [],
-  "similarTo": ["goon-river"],
+  "similarTo": [
+    "goon-river"
+  ],
   "sourceVideos": [],
-  "notes": "Основан на 'Spoon River Anthology' Эдгара Ли Мастерса."
+  "notes": "Основан на 'Spoon River Anthology' Эдгара Ли Мастерса.",
+  "formCategory": "long-form"
 }

@@ -1,6 +1,13 @@
 import Link from 'next/link'
 import { getFormats } from '@/lib/formats'
+import { isStructuredFormat, isWarmup } from '@/lib/format-types'
 import { PrintButton } from '@/components/PrintButton'
+
+const formatCategoryLabels = {
+  'long-form': 'Длинная форма',
+  'short-form': 'Короткая форма',
+  warmup: 'Разминка',
+} as const
 
 export default function PrintMainPage() {
   const formats = getFormats()
@@ -47,35 +54,47 @@ export default function PrintMainPage() {
         </header>
 
         <div className="space-y-6">
-          {formats.map((format, idx) => (
-            <div key={format.id} className={`border-l-4 pl-4 py-3 ${idx > 0 && idx % 10 === 0 ? 'page-break' : ''}`}>
-              <div className="flex items-start justify-between mb-2">
-                <h2 className="text-xl font-bold text-gray-900">
-                  {format.name}
-                </h2>
-                <span className={`text-xs px-2 py-1 rounded ${
-                  format.difficulty === 'beginner'
-                    ? 'bg-green-100 text-green-800'
-                    : format.difficulty === 'intermediate'
-                    ? 'bg-yellow-100 text-yellow-800'
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {format.difficulty === 'beginner' && 'Начальный'}
-                  {format.difficulty === 'intermediate' && 'Средний'}
-                  {format.difficulty === 'advanced' && 'Продвинутый'}
-                </span>
-              </div>
+          {formats.map((format, idx) => {
+            const warmup = isWarmup(format)
+            const summary = warmup
+              ? format.shortDescription ?? format.description ?? ''
+              : format.shortDescription
 
-              <p className="text-gray-600 text-sm mb-2">
-                {format.shortDescription}
-              </p>
+            return (
+              <div key={format.id} className={`border-l-4 pl-4 py-3 ${idx > 0 && idx % 10 === 0 ? 'page-break' : ''}`}>
+                <div className="flex items-start justify-between mb-2">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    {format.name}
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs px-2 py-1 rounded bg-slate-100 text-slate-700">
+                      {formatCategoryLabels[format.formCategory]}
+                    </span>
+                    {warmup ? (
+                      <span className="text-xs px-2 py-1 rounded bg-orange-100 text-orange-800">
+                        🎯 {format.warmupType}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
 
-              <div className="flex gap-4 text-xs text-gray-500">
-                <span>👥 {format.minPlayers}–{format.maxPlayers} чел.</span>
-                <span>⏱️ {format.duration}</span>
+                {summary && (
+                  <p className="text-gray-600 text-sm mb-2">
+                    {summary}
+                  </p>
+                )}
+
+                {isStructuredFormat(format) ? (
+                  <div className="flex gap-4 text-xs text-gray-500">
+                    <span>👥 {format.minPlayers}–{format.maxPlayers} чел.</span>
+                    <span>⏱️ {format.duration}</span>
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500">Разминка · {format.warmupType}</p>
+                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         <footer className="mt-12 pt-6 border-t text-center text-sm text-gray-500">
