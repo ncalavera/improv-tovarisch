@@ -135,6 +135,7 @@ export function FormatsExplorer({ formats }: Props) {
   const [playersFilter, setPlayersFilter] = useState<'all' | number>('all')
   const [sortPair, setSortPair] = useState<SortPair>('default')
   const [sortReversed, setSortReversed] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const playerOptions = useMemo(() => {
     const numbers = new Set<number>()
@@ -147,7 +148,16 @@ export function FormatsExplorer({ formats }: Props) {
   }, [formats])
 
   const filteredFormats = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase()
+
     return formats.filter((format) => {
+      if (normalizedQuery) {
+        const name = format.name.toLowerCase()
+        if (!name.includes(normalizedQuery)) {
+          return false
+        }
+      }
+
       if (difficultyFilter !== 'all' && format.difficulty !== difficultyFilter) {
         return false
       }
@@ -164,7 +174,7 @@ export function FormatsExplorer({ formats }: Props) {
 
       return true
     })
-  }, [difficultyFilter, formats, lengthFilter, playersFilter])
+  }, [difficultyFilter, formats, lengthFilter, playersFilter, searchQuery])
 
   const defaultSortedFormats = useMemo(() => {
     return [...filteredFormats].sort((a, b) => {
@@ -216,7 +226,21 @@ export function FormatsExplorer({ formats }: Props) {
 
       <div className="bg-white/80 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <label className="flex flex-col gap-1 text-sm min-w-[220px]">
+              <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span aria-hidden="true">🔍</span>
+                <span>Поиск формата</span>
+              </span>
+              <input
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                type="text"
+                placeholder="Введите название"
+                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </label>
+
             <label className="flex flex-col gap-1 text-sm">
               <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 <span aria-hidden="true">🧠</span>
