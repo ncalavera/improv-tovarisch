@@ -1,0 +1,22 @@
+{
+  "id": "montage-ending",
+  "name": "Montage Ending",
+  "shortDescription": "Финал через монтаж быстрых сцен",
+  "fullDescription": "Формат где финал делается через монтаж быстрых сцен, завершающих все сюжетные линии.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Основная часть", "description": "Развитие историй", "duration": "15-18 минут"},
+    {"name": "Финальный монтаж", "description": "Быстрые завершающие сцены", "duration": "5-7 минут"}
+  ],
+  "montageRules": "Финал состоит из быстрых сцен, завершающих все линии.",
+  "skills": ["callbacks", "быстрый-темп", "завершение-историй", "монтаж"],
+  "focus": "Удовлетворяющее завершение через монтаж",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": ["montage", "fast-montage"],
+  "sourceVideos": [],
+  "notes": "Требует отслеживания всех сюжетных линий для резолюции."
+}

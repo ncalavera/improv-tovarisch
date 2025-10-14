@@ -1,0 +1,682 @@
+import Link from 'next/link'
+import Image from 'next/image'
+import { notFound } from 'next/navigation'
+import { getFormatById } from '@/lib/formats'
+import { Collapsible } from '@/components/ui/collapsible'
+
+// Convert markdown bold and italic to HTML
+function convertMarkdown(text: string | undefined | null): string {
+  // Handle undefined or null values
+  if (!text) return ''
+
+  // Bold: **text**
+  text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+  // Italic: *text*
+  text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>')
+  return text
+}
+
+export default async function FormatPage({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const format = getFormatById(id)
+
+  if (!format) {
+    notFound()
+  }
+
+  // Determine if format has extended data
+  const isHarold = id === 'harold'
+  const isArmando = id === 'armando'
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Header */}
+      <header className="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link
+              href="/"
+              className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+            >
+              ← Назад к списку
+            </Link>
+            <Link
+              href={`/formats/${id}/print`}
+              className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+            >
+              🖨️ Версия для печати
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+        {/* Format Header */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="flex items-start justify-between mb-4">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">
+              🌀 {format.name}
+            </h1>
+            <span
+              className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                format.difficulty === 'beginner'
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                  : format.difficulty === 'intermediate'
+                  ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+              }`}
+            >
+              {format.difficulty === 'beginner' && 'Начальный'}
+              {format.difficulty === 'intermediate' && 'Средний'}
+              {format.difficulty === 'advanced' && 'Продвинутый'}
+            </span>
+          </div>
+
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
+            {format.shortDescription}
+          </p>
+
+          {/* Meta Info */}
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">👥</span>
+              <div>
+                <p className="text-gray-500 dark:text-gray-400">Игроки</p>
+                <p className="font-semibold text-gray-900 dark:text-gray-100">
+                  {format.minPlayers}–{format.maxPlayers} человек
+                  {isHarold && ' (оптимально 8)'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">⏱️</span>
+              <div>
+                <p className="text-gray-500 dark:text-gray-400">Длительность</p>
+                <p className="font-semibold text-gray-900 dark:text-gray-100">
+                  {format.duration}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Description */}
+        <Collapsible title="Описание" icon="📖" defaultOpen={true}>
+          <div className="text-gray-700 dark:text-gray-300 leading-relaxed space-y-3">
+            {format.fullDescription.split('\n\n').map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
+          </div>
+        </Collapsible>
+
+        {/* Harold Diagram */}
+        {isHarold && (
+          <Collapsible title="Структура сцен" icon="🧱" defaultOpen={true}>
+            <div className="mb-4">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-6 font-mono text-sm text-center">
+                <div className="text-gray-700 dark:text-gray-300">
+                  <strong>Opening</strong> → <span className="text-green-600 dark:text-green-400">A1 B1 C1</span> →
+                  <span className="text-orange-600 dark:text-orange-400"> Group Game 1</span> →
+                  <span className="text-purple-600 dark:text-purple-400"> A2 B2 C2</span> →
+                  <span className="text-orange-600 dark:text-orange-400"> Group Game 2</span> →
+                  <span className="text-red-600 dark:text-red-400"> A3 B3 C3 (финал)</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+              <Image
+                src="/harold-diagram.svg"
+                alt="Диаграмма структуры Harold"
+                width={800}
+                height={500}
+                className="w-full"
+              />
+            </div>
+
+            <div className="mt-2 text-center">
+              <a
+                href="https://www.behance.net/gallery/56737073/The-Harold-Infographic-Poster-%28-Other-Improv-Forms%29"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                Альтернативная инфографика на Behance →
+              </a>
+            </div>
+
+            <div className="mt-4 space-y-2 text-sm text-gray-600 dark:text-gray-400">
+              <p>• <span className="font-bold">A, B, C</span> — три параллельные линии с разными персонажами</p>
+              <p>• <span className="font-bold">A2 / B2 / C2</span> — новые вариации той же темы, без пересечений между линиями</p>
+              <p>• <span className="font-bold">A3 / B3 / C3</span> — финальный блок, где линии могут соединиться или «рифмоваться»</p>
+              <p>• <span className="font-bold">Group Games</span> — короткие ансамблевые вставки, усиливающие тему открытия</p>
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Harold Openings */}
+        {isHarold && format.openings && (
+          <Collapsible title="Форматы открытий (Opening)" icon="🔓" defaultOpen={false}>
+            <div className="space-y-6">
+              {format.openings.map((opening: any, idx: number) => {
+                const icons = ['🎯', '📖', '🎭', '🎨']
+                return (
+                  <div key={idx} className="border-l-4 border-blue-500 dark:border-blue-400 pl-6 py-3">
+                    <div className="flex gap-4 items-start mb-3">
+                      <span className="text-3xl flex-shrink-0">{icons[idx]}</span>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">
+                        {idx + 1}. {opening.name}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Как проходит:</p>
+                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                          {opening.description}
+                        </p>
+                      </div>
+
+                      {opening.howItWorks && (
+                        <div>
+                          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {opening.howItWorks}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.threeRounds && (
+                        <div>
+                          <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Три круга:</p>
+                          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {opening.threeRounds}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.structure && (
+                        <div>
+                          <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Структура:</p>
+                          <p
+                            className="text-gray-600 dark:text-gray-400 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: convertMarkdown(opening.structure) }}
+                          />
+                        </div>
+                      )}
+
+                      {opening.example && (
+                        <div className="bg-gray-50 dark:bg-gray-800/50 rounded p-3 border-l-2 border-gray-300 dark:border-gray-600">
+                          <p className="text-gray-600 dark:text-gray-400 italic">
+                            Пример: {opening.example}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.result && (
+                        <div>
+                          <p className="text-blue-600 dark:text-blue-400 font-medium">
+                            → {opening.result}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.benefit && (
+                        <div>
+                          <p className="text-blue-600 dark:text-blue-400 font-medium">
+                            → {opening.benefit}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Armando Openings */}
+        {isArmando && format.openings && (
+          <Collapsible title="Варианты структуры монологов" icon="🎤" defaultOpen={false}>
+            <div className="space-y-6">
+              {format.openings.map((opening: any, idx: number) => {
+                const icons = ['🎙️', '👥', '🎭', '✨']
+                return (
+                  <div key={idx} className="border-l-4 border-purple-500 dark:border-purple-400 pl-6 py-3">
+                    <div className="flex gap-4 items-start mb-3">
+                      <span className="text-3xl flex-shrink-0">{icons[idx]}</span>
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">
+                        {idx + 1}. {opening.name}
+                      </h3>
+                    </div>
+
+                    <div className="space-y-3 text-sm">
+                      <div>
+                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                          {opening.description}
+                        </p>
+                      </div>
+
+                      {opening.howItWorks && (
+                        <div>
+                          <p className="font-semibold text-gray-700 dark:text-gray-300 mb-1">Как работает:</p>
+                          <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {opening.howItWorks}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.example && (
+                        <div className="bg-gray-50 dark:bg-gray-800/50 rounded p-3 border-l-2 border-gray-300 dark:border-gray-600">
+                          <p className="text-gray-600 dark:text-gray-400 italic">
+                            Пример: {opening.example}
+                          </p>
+                        </div>
+                      )}
+
+                      {opening.result && (
+                        <div>
+                          <p className="text-purple-600 dark:text-purple-400 font-medium">
+                            → {opening.result}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Components (for non-Harold or as fallback) */}
+        {!isHarold && (
+          <Collapsible title="Структура формата" icon="🧱">
+            <div className="space-y-4">
+              {format.components.map((component, index) => (
+                <div
+                  key={index}
+                  className="border-l-4 border-blue-500 dark:border-blue-400 pl-4 py-2"
+                >
+                  <div className="flex justify-between items-start mb-1">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">
+                      {index + 1}. {component.name}
+                    </h3>
+                    {component.duration && (
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {component.duration}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    {component.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Harold Key Rules */}
+        {isHarold && format.keyRules && (
+          <Collapsible title="Ключевые правила" icon="⚙️">
+            <ul className="space-y-2">
+              {format.keyRules.map((rule: string, idx: number) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-blue-500 dark:text-blue-400 mt-1">•</span>
+                  <span className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: convertMarkdown(rule) }} />
+                </li>
+              ))}
+            </ul>
+          </Collapsible>
+        )}
+
+        {/* Armando Key Rules */}
+        {isArmando && format.keyRules && (
+          <Collapsible title="Ключевые правила" icon="⚙️">
+            <ul className="space-y-2">
+              {format.keyRules.map((rule: string, idx: number) => (
+                <li key={idx} className="flex items-start gap-2">
+                  <span className="text-purple-500 dark:text-purple-400 mt-1">•</span>
+                  <span className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: convertMarkdown(rule) }} />
+                </li>
+              ))}
+            </ul>
+          </Collapsible>
+        )}
+
+        {/* Montage Rules */}
+        {format.montageRules && !isHarold && (
+          <Collapsible title="Правила монтажа" icon="✂️">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+              {format.montageRules}
+            </p>
+          </Collapsible>
+        )}
+
+        {/* Harold Example */}
+        {isHarold && format.example && (
+          <Collapsible title={`Пример на тему: «${format.example.theme}»`} icon="🎬">
+            <div className="space-y-4">
+              {/* Opening */}
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  Opening
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                  {format.example.opening}
+                </p>
+              </div>
+
+              {/* Beatings */}
+              {format.example.beatings && format.example.beatings.map((beating: any, beatingIdx: number) => (
+                <div key={beatingIdx} className="space-y-3">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    Beating {beating.number}
+                  </h3>
+
+                  {/* Scenes within this beating */}
+                  {beating.scenes && beating.scenes.map((scene: any, idx: number) => (
+                    <div key={idx} className={`rounded-lg p-4 border ${
+                      beating.number === 3
+                        ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        : beating.number === 2
+                        ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800'
+                        : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
+                    }`}>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                        {scene.label}
+                      </h3>
+                      <p className="text-gray-700 dark:text-gray-300 text-sm mb-1">
+                        {scene.description}
+                      </p>
+                      {scene.inspiration && (
+                        <p className="text-sm text-blue-600 dark:text-blue-400 italic mt-2">
+                          Inspiration: {scene.inspiration}
+                        </p>
+                      )}
+                      {scene.connections && (
+                        <p className="text-sm text-green-600 dark:text-green-400 font-semibold mt-2">
+                          → {scene.connections}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {/* Group Games */}
+              {format.example.groupGames && format.example.groupGames.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    Group Games
+                  </h3>
+                  {format.example.groupGames.map((game: any, gameIdx: number) => (
+                    <div key={gameIdx} className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+                      <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">
+                        {game.type} (после {game.after})
+                      </h4>
+                      <p className="text-gray-700 dark:text-gray-300 text-sm">
+                        {game.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Armando Example */}
+        {isArmando && format.example && (
+          <Collapsible title={`Пример на тему: «${format.example.theme}»`} icon="🎬">
+            <div className="space-y-4">
+              {/* Monologist Info */}
+              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  <strong>Монологист:</strong> {format.example.monologist}
+                </p>
+              </div>
+
+              {/* Rounds */}
+              {format.example.rounds.map((round: any, roundIdx: number) => (
+                <div key={roundIdx} className="space-y-3">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    Раунд {round.number}
+                  </h3>
+
+                  {/* Monologue */}
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                    <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                      Монолог {round.number} ({round.monologue.duration})
+                    </h4>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm mb-2">
+                      {round.monologue.summary}
+                    </p>
+                    {round.monologue.keyDetails && (
+                      <div className="mt-2">
+                        <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                          Ключевые детали:
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {round.monologue.keyDetails.map((detail: string, idx: number) => (
+                            <span
+                              key={idx}
+                              className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded"
+                            >
+                              {detail}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Scenes */}
+                  <div className="space-y-2">
+                    {round.scenes.map((scene: any, sceneIdx: number) => (
+                      <div
+                        key={sceneIdx}
+                        className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+                      >
+                        <h5 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
+                          Сцена {scene.number}
+                        </h5>
+                        <p className="text-gray-700 dark:text-gray-300 text-sm">
+                          {scene.description}
+                        </p>
+                        {scene.inspiration && (
+                          <p className="text-xs text-purple-600 dark:text-purple-400 italic mt-1">
+                            Inspiration: {scene.inspiration}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {/* Themes Summary */}
+              {format.example.themes && (
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    <strong>Темы:</strong> {format.example.themes}
+                  </p>
+                </div>
+              )}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Skills and Focus */}
+        <Collapsible title="Навыки и фокус" icon="🎯">
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Развиваемые навыки:
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {format.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Педагогический фокус:
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">{format.focus}</p>
+            </div>
+          </div>
+        </Collapsible>
+
+        {/* Videos */}
+        {((format.resources?.videos && format.resources.videos.length > 0) || (format.sourceVideos && format.sourceVideos.length > 0)) && (
+          <Collapsible title="Видео референсы" icon="🎥">
+            <div className="space-y-3">
+              {format.resources?.videos ? (
+                format.resources.videos.map((video: any, idx: number) => (
+                  <a
+                    key={idx}
+                    href={video.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">📹</span>
+                        <div>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">
+                            {video.title}
+                          </p>
+                          {video.lang && (
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              Язык: {video.lang === 'RU' ? 'Русский' : 'English'}
+                            </p>
+                          )}
+                          {video.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {video.description}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <span className="text-blue-500 dark:text-blue-400">→</span>
+                    </div>
+                  </a>
+                ))
+              ) : (
+                format.sourceVideos.map((url, idx) => (
+                  <a
+                    key={idx}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl">📹</span>
+                        <span className="text-gray-900 dark:text-gray-100">{url}</span>
+                      </div>
+                      <span className="text-blue-500 dark:text-blue-400">→</span>
+                    </div>
+                  </a>
+                ))
+              )}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Books */}
+        {format.resources?.books && format.resources.books.length > 0 && (
+          <Collapsible title="Книги" icon="📘">
+            <div className="space-y-3">
+              {format.resources.books.map((book: any, idx: number) => (
+                book.url ? (
+                  <a
+                    key={idx}
+                    href={book.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                  >
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                          {book.title}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                          {book.authors}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-500">
+                          {book.description}
+                        </p>
+                      </div>
+                      <span className="text-blue-500 dark:text-blue-400 flex-shrink-0">→</span>
+                    </div>
+                  </a>
+                ) : (
+                  <div key={idx} className="p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                      {book.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                      {book.authors}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">
+                      {book.description}
+                    </p>
+                  </div>
+                )
+              ))}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Links */}
+        {format.resources?.links && format.resources.links.length > 0 && (
+          <Collapsible title="Полезные ссылки" icon="🔗">
+            <div className="space-y-2">
+              {format.resources.links.map((link: any, idx: number) => (
+                <a
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-900 dark:text-gray-100">{link.title}</span>
+                    <span className="text-blue-500 dark:text-blue-400">→</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </Collapsible>
+        )}
+
+        {/* Notes */}
+        {format.notes && (
+          <Collapsible title="Заметки" icon="💡" variant="warning">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+              {format.notes}
+            </p>
+          </Collapsible>
+        )}
+      </main>
+    </div>
+  )
+}

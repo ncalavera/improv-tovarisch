@@ -1,0 +1,25 @@
+{
+  "id": "goon-river",
+  "name": "Goon River",
+  "shortDescription": "Монологи духов на кладбище о своей жизни",
+  "fullDescription": "Формат где игроки играют духов умерших людей на кладбище, рассказывающих истории своей жизни через монологи.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {
+      "name": "Монологи духов",
+      "description": "Каждый дух рассказывает свою историю",
+      "duration": "20-25 минут"
+    }
+  ],
+  "montageRules": "Монологи могут чередоваться или следовать друг за другом. Каждый дух уникален.",
+  "skills": ["монолог", "storytelling", "характер", "эмоциональность"],
+  "focus": "Создание богатых историй жизни через монологи",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": [],
+  "sourceVideos": [],
+  "notes": "Основан на 'Spoon River Anthology'. Фокус на поэтичности и жизненных историях."
+}

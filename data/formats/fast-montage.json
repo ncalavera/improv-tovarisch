@@ -1,0 +1,21 @@
+{
+  "id": "fast-montage",
+  "name": "Fast Montage",
+  "shortDescription": "Очень быстрые короткие сцены",
+  "fullDescription": "Формат очень быстрых коротких сцен (5-15 секунд каждая) на одну тему. Высокая энергия и темп.",
+  "minPlayers": 4,
+  "maxPlayers": 8,
+  "duration": "10-15 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Быстрые сцены", "description": "Серия 5-15 секундных сцен", "duration": "10-15 минут"}
+  ],
+  "montageRules": "Максимально быстрый темп. Одна идея на сцену. Высокая энергия.",
+  "skills": ["быстрота-мышления", "редактирование", "разнообразие", "энергия"],
+  "focus": "Скорость и разнообразие подходов",
+  "variations": ["montage"],
+  "prerequisites": [],
+  "similarTo": ["montage"],
+  "sourceVideos": [],
+  "notes": "Отличная разминка. Учит быстрому входу и выходу."
+}

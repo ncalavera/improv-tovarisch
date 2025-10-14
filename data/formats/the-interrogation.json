@@ -1,0 +1,22 @@
+{
+  "id": "the-interrogation",
+  "name": "The Interrogation",
+  "shortDescription": "Допрос персонажа и сцены из его прошлого",
+  "fullDescription": "Формат с допросом центрального персонажа, перемежающимся со сценами-flashback из его прошлого.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Допрос", "description": "Сцены допроса в настоящем", "duration": "вплетены"},
+    {"name": "Флэшбэки", "description": "Сцены из прошлого персонажа", "duration": "вплетены"}
+  ],
+  "montageRules": "Чередование допроса и флэшбэков. Прошлое раскрывает детали для допроса.",
+  "skills": ["backstory", "раскрытие-через-допрос", "flashbacks", "напряжение"],
+  "focus": "Создание интриги через постепенное раскрытие",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": ["murder-mystery"],
+  "sourceVideos": [],
+  "notes": "Баланс между допросом и флэшбэками важен для темпа."
+}

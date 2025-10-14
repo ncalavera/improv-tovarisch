@@ -1,0 +1,21 @@
+{
+  "id": "follow-the-leaver",
+  "name": "Follow the Leaver",
+  "shortDescription": "Техника следования за уходящим персонажем",
+  "fullDescription": "Техника/формат где когда персонаж покидает сцену, следующая сцена начинается с этим персонажем в новом месте.",
+  "minPlayers": 4,
+  "maxPlayers": 8,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Цепочка сцен", "description": "Сцены связаны уходящими персонажами", "duration": "20-25 минут"}
+  ],
+  "montageRules": "Органичные переходы через уход персонажа. Создаёт поток.",
+  "skills": ["органичные-переходы", "tag-outs", "связность-мира", "текучесть"],
+  "focus": "Создание плавного потока сцен",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": ["slacker"],
+  "sourceVideos": [],
+  "notes": "Основа для формата Slacker."
+}

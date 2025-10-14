@@ -1,0 +1,21 @@
+{
+  "id": "harold-monoscene",
+  "name": "Harold-Monoscene",
+  "shortDescription": "Структура Harold в одной непрерывной сцене",
+  "fullDescription": "Вариация Harold где вся структура происходит в одной непрерывной сцене с теми же персонажами.",
+  "minPlayers": 6,
+  "maxPlayers": 8,
+  "duration": "25-30 минут",
+  "difficulty": "advanced",
+  "components": [
+    {"name": "Единая сцена", "description": "Harold структура в monoscene", "duration": "25-30 минут"}
+  ],
+  "montageRules": "Структура Harold сохраняется, но без переключений сцен. Одна локация, одни персонажи.",
+  "skills": ["структура-Harold", "терпение-monoscene", "развитие-отношений", "выносливость"],
+  "focus": "Объединение структуры Harold с глубиной monoscene",
+  "variations": ["harold", "lotus"],
+  "prerequisites": [],
+  "similarTo": ["harold", "lotus"],
+  "sourceVideos": [],
+  "notes": "Очень сложная гибридная форма для опытных импровизаторов."
+}

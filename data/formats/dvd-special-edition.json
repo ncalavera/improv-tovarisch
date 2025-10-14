@@ -1,0 +1,40 @@
+{
+  "id": "dvd-special-edition",
+  "name": "DVD Special Edition",
+  "shortDescription": "Фильм с комментариями и дополнительными материалами",
+  "fullDescription": "Импровизированный 'фильм' с дополнительными материалами: комментарии режиссёра, удалённые сцены, making-of.",
+  "minPlayers": 6,
+  "maxPlayers": 8,
+  "duration": "30-40 минут",
+  "difficulty": "advanced",
+  "components": [
+    {
+      "name": "Основной фильм",
+      "description": "Импровизированный фильм",
+      "duration": "15-20 минут"
+    },
+    {
+      "name": "Комментарии",
+      "description": "Режиссёр комментирует",
+      "duration": "5-7 минут"
+    },
+    {
+      "name": "Удалённые сцены",
+      "description": "Сцены которые не вошли",
+      "duration": "3-5 минут"
+    },
+    {
+      "name": "Making-of",
+      "description": "За кулисами создания",
+      "duration": "5-8 минут"
+    }
+  ],
+  "montageRules": "Мета-юмор о кинопроизводстве. Можно перематывать и комментировать.",
+  "skills": ["мета-юмор", "пародия", "кинематографичность", "импровизация-в-импровизации"],
+  "focus": "Игра с форматом DVD и киноклише",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": [],
+  "sourceVideos": [],
+  "notes": "Требует знания киноклише и DVD культуры."
+}

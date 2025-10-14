@@ -1,0 +1,22 @@
+{
+  "id": "voices-from-heaven",
+  "name": "Voices From Heaven",
+  "shortDescription": "Духи на небесах комментируют жизнь живых",
+  "fullDescription": "Вариация Goon River где духи находятся на небесах и комментируют жизнь живых людей внизу.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Комментарии духов", "description": "Духи наблюдают и комментируют", "duration": "вплетены"},
+    {"name": "Сцены живых", "description": "Жизнь на земле", "duration": "вплетены"}
+  ],
+  "montageRules": "Чередование комментариев с небес и сцен на земле.",
+  "skills": ["перспектива-со-стороны", "комментарий", "ирония", "контраст"],
+  "focus": "Взгляд на жизнь с иронической дистанции",
+  "variations": ["goon-river"],
+  "prerequisites": [],
+  "similarTo": ["goon-river"],
+  "sourceVideos": [],
+  "notes": "Позволяет иронический и мудрый взгляд на человеческую жизнь."
+}

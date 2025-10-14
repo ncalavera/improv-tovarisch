@@ -1,0 +1,21 @@
+{
+  "id": "momentos-de-la-vida",
+  "name": "Momentos De La Vida",
+  "shortDescription": "Ключевые моменты жизни персонажа",
+  "fullDescription": "Формат показывающий ключевые моменты из жизни персонажа, возможно в нехронологическом порядке.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Ключевые моменты", "description": "Важные события жизни", "duration": "20-25 минут"}
+  ],
+  "montageRules": "Моменты могут быть в любом порядке. Каждый - поворотная точка.",
+  "skills": ["нелинейный-нарратив", "ключевые-моменты", "эмоциональность", "характер"],
+  "focus": "Создание портрета жизни через моменты",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": ["life-in-one-day", "time-line"],
+  "sourceVideos": [],
+  "notes": "Нелинейность добавляет интригу раскрытию персонажа."
+}

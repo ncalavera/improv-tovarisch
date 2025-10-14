@@ -1,0 +1,21 @@
+{
+  "id": "spoon-river",
+  "name": "Spoon River",
+  "shortDescription": "Поэтичные монологи духов на кладбище",
+  "fullDescription": "Вариация Goon River с более поэтичным, литературным подходом к монологам духов.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {"name": "Поэтичные монологи", "description": "Духи рассказывают истории", "duration": "20-25 минут"}
+  ],
+  "montageRules": "Монологи более литературны и поэтичны чем в обычном Goon River.",
+  "skills": ["монолог", "поэтичность", "литературность", "эмоциональность"],
+  "focus": "Создание поэтичных жизненных историй",
+  "variations": ["goon-river"],
+  "prerequisites": [],
+  "similarTo": ["goon-river"],
+  "sourceVideos": [],
+  "notes": "Основан на 'Spoon River Anthology' Эдгара Ли Мастерса."
+}

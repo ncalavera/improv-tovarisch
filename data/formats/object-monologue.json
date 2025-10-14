@@ -1,0 +1,30 @@
+{
+  "id": "object-monologue",
+  "name": "Object Monologue",
+  "shortDescription": "Неодушевлённый объект рассказывает свою историю",
+  "fullDescription": "Формат начинается с монолога от лица неодушевлённого объекта о его 'жизни', затем сцены вдохновлённые этой историей.",
+  "minPlayers": 4,
+  "maxPlayers": 6,
+  "duration": "20-25 минут",
+  "difficulty": "intermediate",
+  "components": [
+    {
+      "name": "Монолог объекта",
+      "description": "Объект рассказывает о своей истории",
+      "duration": "3-5 минут"
+    },
+    {
+      "name": "Сцены",
+      "description": "Сцены вдохновлённые историей объекта",
+      "duration": "15-20 минут"
+    }
+  ],
+  "montageRules": "Монолог задаёт тон и темы для сцен.",
+  "skills": ["перспектива", "character-work", "вдохновение", "креативность"],
+  "focus": "Исследование мира через необычную перспективу",
+  "variations": [],
+  "prerequisites": [],
+  "similarTo": ["armando"],
+  "sourceVideos": [],
+  "notes": "Выбор интересного объекта с богатой 'историей' важен."
+}
