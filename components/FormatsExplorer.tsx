@@ -11,20 +11,29 @@ const difficultyLabels: Record<Format['difficulty'], string> = {
   advanced: 'Продвинутый'
 }
 
-const difficultyOrder: Record<Format['difficulty'], number> = {
-  beginner: 0,
-  intermediate: 1,
-  advanced: 2
-}
-
 const difficultyOrderDesc: Record<Format['difficulty'], number> = {
   advanced: 0,
   intermediate: 1,
   beginner: 2
 }
 
-type LengthFilter = 'all' | 'short' | 'medium' | 'long'
-type SortOption = 'default' | 'difficulty' | 'length' | 'players'
+type LengthFilter = 'all' | 'upTo15' | 'to25' | 'over25'
+type SortPair = 'default' | 'difficulty' | 'players' | 'length'
+
+const sortLabelMap: Record<Exclude<SortPair, 'default'>, { forward: string; reverse: string }> = {
+  difficulty: {
+    forward: 'Посложнее → Попроще',
+    reverse: 'Попроще → Посложнее'
+  },
+  players: {
+    forward: 'Побольше людей → Поменьше людей',
+    reverse: 'Поменьше людей → Побольше людей'
+  },
+  length: {
+    forward: 'Подлиннее → Покороче',
+    reverse: 'Покороче → Подлиннее'
+  }
+}
 
 type Props = {
   formats: Format[]
@@ -86,26 +95,46 @@ function matchesLengthFilter(duration: string, lengthFilter: LengthFilter): bool
     return true
   }
 
-  if (lengthFilter === 'short') {
-    return minutes <= 20
+  if (lengthFilter === 'upTo15') {
+    return minutes <= 15
   }
 
-  if (lengthFilter === 'medium') {
-    return minutes > 20 && minutes <= 40
+  if (lengthFilter === 'to25') {
+    return minutes > 15 && minutes <= 25
   }
 
-  return minutes > 40
+  return minutes > 25
 }
 
 function getAveragePlayers(format: Format): number {
   return (format.minPlayers + format.maxPlayers) / 2
 }
 
+function compareDifficultyDesc(a: Format, b: Format): number {
+  return difficultyOrderDesc[a.difficulty] - difficultyOrderDesc[b.difficulty]
+}
+
+function comparePlayersDesc(a: Format, b: Format): number {
+  return getAveragePlayers(b) - getAveragePlayers(a)
+}
+
+function compareLengthDesc(a: Format, b: Format): number {
+  const aDuration = estimateDurationMinutes(a.duration)
+  const bDuration = estimateDurationMinutes(b.duration)
+
+  if (aDuration === null && bDuration === null) return 0
+  if (aDuration === null) return 1
+  if (bDuration === null) return -1
+
+  return bDuration - aDuration
+}
+
 export function FormatsExplorer({ formats }: Props) {
   const [difficultyFilter, setDifficultyFilter] = useState<'all' | Format['difficulty']>('all')
   const [lengthFilter, setLengthFilter] = useState<LengthFilter>('all')
   const [playersFilter, setPlayersFilter] = useState<'all' | number>('all')
-  const [sortOption, setSortOption] = useState<SortOption>('default')
+  const [sortPair, setSortPair] = useState<SortPair>('default')
+  const [sortReversed, setSortReversed] = useState(false)
 
   const playerOptions = useMemo(() => {
     const numbers = new Set<number>()
@@ -157,30 +186,26 @@ export function FormatsExplorer({ formats }: Props) {
   }, [filteredFormats])
 
   const sortedFormats = useMemo(() => {
-    if (sortOption === 'default') {
+    if (sortPair === 'default') {
       return defaultSortedFormats
     }
 
     const formatsToSort = [...defaultSortedFormats]
+    let comparator: (a: Format, b: Format) => number
 
-    if (sortOption === 'difficulty') {
-      return formatsToSort.sort((a, b) => difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty])
+    if (sortPair === 'difficulty') {
+      comparator = compareDifficultyDesc
+    } else if (sortPair === 'players') {
+      comparator = comparePlayersDesc
+    } else {
+      comparator = compareLengthDesc
     }
 
-    if (sortOption === 'length') {
-      return formatsToSort.sort((a, b) => {
-        const aDuration = estimateDurationMinutes(a.duration)
-        const bDuration = estimateDurationMinutes(b.duration)
-
-        if (aDuration === null && bDuration === null) return 0
-        if (aDuration === null) return 1
-        if (bDuration === null) return -1
-        return aDuration - bDuration
-      })
-    }
-
-    return formatsToSort.sort((a, b) => getAveragePlayers(a) - getAveragePlayers(b))
-  }, [defaultSortedFormats, sortOption])
+    return formatsToSort.sort((a, b) => {
+      const result = comparator(a, b)
+      return sortReversed ? -result : result
+    })
+  }, [defaultSortedFormats, sortPair, sortReversed])
 
   return (
     <div>
@@ -190,68 +215,108 @@ export function FormatsExplorer({ formats }: Props) {
       </div>
 
       <div className="bg-white/80 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 shadow-sm">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Сложность</span>
-            <select
-              value={difficultyFilter}
-              onChange={(event) =>
-                setDifficultyFilter(event.target.value as 'all' | Format['difficulty'])
-              }
-              className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Любая сложность</option>
-              <option value="beginner">Только начальный уровень</option>
-              <option value="intermediate">Только средний уровень</option>
-              <option value="advanced">Только продвинутый уровень</option>
-            </select>
-          </label>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-3">
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span aria-hidden="true">🧠</span>
+                <span>Сложность</span>
+              </span>
+              <select
+                value={difficultyFilter}
+                onChange={(event) =>
+                  setDifficultyFilter(event.target.value as 'all' | Format['difficulty'])
+                }
+                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Любая</option>
+                <option value="beginner">Начальный</option>
+                <option value="intermediate">Средний</option>
+                <option value="advanced">Продвинутый</option>
+              </select>
+            </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Длительность</span>
-            <select
-              value={lengthFilter}
-              onChange={(event) => setLengthFilter(event.target.value as LengthFilter)}
-              className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Любая длительность</option>
-              <option value="short">Короткие (до 20 минут)</option>
-              <option value="medium">Средние (20-40 минут)</option>
-              <option value="long">Длинные (40 минут и больше)</option>
-            </select>
-          </label>
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span aria-hidden="true">⏱️</span>
+                <span>Длительность</span>
+              </span>
+              <select
+                value={lengthFilter}
+                onChange={(event) => setLengthFilter(event.target.value as LengthFilter)}
+                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Любая</option>
+                <option value="upTo15">До 15 минут</option>
+                <option value="to25">16–25 минут</option>
+                <option value="over25">26+ минут</option>
+              </select>
+            </label>
 
-          <label className="flex flex-col gap-2">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Количество игроков</span>
-            <select
-              value={playersFilter}
-              onChange={(event) =>
-                setPlayersFilter(event.target.value === 'all' ? 'all' : Number(event.target.value))
-              }
-              className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="all">Любое количество</option>
-              {playerOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option} игроков
-                </option>
-              ))}
-            </select>
-          </label>
+            <label className="flex flex-col gap-1 text-sm">
+              <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span aria-hidden="true">👥</span>
+                <span>Игроки</span>
+              </span>
+              <select
+                value={playersFilter === 'all' ? 'all' : String(playersFilter)}
+                onChange={(event) =>
+                  setPlayersFilter(event.target.value === 'all' ? 'all' : Number(event.target.value))
+                }
+                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Любое</option>
+                {playerOptions.map((option) => (
+                  <option key={option} value={String(option)}>
+                    {option} чел.
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
-          <label className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1 text-sm">
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Сортировка</span>
-            <select
-              value={sortOption}
-              onChange={(event) => setSortOption(event.target.value as SortOption)}
-              className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="default">По умолчанию</option>
-              <option value="difficulty">Сложность</option>
-              <option value="length">Длительность</option>
-              <option value="players">Количество игроков</option>
-            </select>
-          </label>
+            <div className="flex items-center gap-2">
+              <select
+                value={sortPair}
+                onChange={(event) => {
+                  const value = event.target.value as SortPair
+                  setSortPair(value)
+                  setSortReversed(false)
+                }}
+                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="default">По умолчанию</option>
+                <option value="difficulty">
+                  {sortPair === 'difficulty' && sortReversed
+                    ? sortLabelMap.difficulty.reverse
+                    : sortLabelMap.difficulty.forward}
+                </option>
+                <option value="players">
+                  {sortPair === 'players' && sortReversed
+                    ? sortLabelMap.players.reverse
+                    : sortLabelMap.players.forward}
+                </option>
+                <option value="length">
+                  {sortPair === 'length' && sortReversed
+                    ? sortLabelMap.length.reverse
+                    : sortLabelMap.length.forward}
+                </option>
+              </select>
+              {sortPair !== 'default' && (
+                <button
+                  type="button"
+                  onClick={() => setSortReversed((prev) => !prev)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Поменять направление сортировки"
+                  title="Поменять направление сортировки"
+                >
+                  <span aria-hidden="true">⇆</span>
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 
