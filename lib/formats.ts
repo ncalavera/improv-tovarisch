@@ -100,11 +100,14 @@ export function saveFormat(format: Format): void {
 }
 
 // Добавить новый формат
+export function addFormat(format: Omit<StructuredFormat, 'id'>): StructuredFormat
+export function addFormat(format: Omit<WarmupFormat, 'id'>): WarmupFormat
 export function addFormat(format: Omit<Format, 'id'>): Format {
-  const newFormat: Format = {
+  const newFormat = {
     ...format,
     id: String(Date.now()) // Простой ID на основе timestamp
-  }
+  } as Format
+
   saveFormat(newFormat)
   return newFormat
 }
