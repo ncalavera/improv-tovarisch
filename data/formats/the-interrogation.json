@@ -8,15 +8,31 @@
   "duration": "20-25 минут",
   "difficulty": "intermediate",
   "components": [
-    {"name": "Допрос", "description": "Сцены допроса в настоящем", "duration": "вплетены"},
-    {"name": "Флэшбэки", "description": "Сцены из прошлого персонажа", "duration": "вплетены"}
+    {
+      "name": "Допрос",
+      "description": "Сцены допроса в настоящем",
+      "duration": "вплетены"
+    },
+    {
+      "name": "Флэшбэки",
+      "description": "Сцены из прошлого персонажа",
+      "duration": "вплетены"
+    }
   ],
   "montageRules": "Чередование допроса и флэшбэков. Прошлое раскрывает детали для допроса.",
-  "skills": ["backstory", "раскрытие-через-допрос", "flashbacks", "напряжение"],
+  "skills": [
+    "backstory",
+    "раскрытие-через-допрос",
+    "flashbacks",
+    "напряжение"
+  ],
   "focus": "Создание интриги через постепенное раскрытие",
   "variations": [],
   "prerequisites": [],
-  "similarTo": ["murder-mystery"],
+  "similarTo": [
+    "murder-mystery"
+  ],
   "sourceVideos": [],
-  "notes": "Баланс между допросом и флэшбэками важен для темпа."
+  "notes": "Баланс между допросом и флэшбэками важен для темпа.",
+  "formCategory": "long-form"
 }

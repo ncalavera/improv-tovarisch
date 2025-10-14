@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getFormatById } from '@/lib/formats'
+import { isStructuredFormat, isWarmup } from '@/lib/format-types'
 import { PrintButton } from '@/components/PrintButton'
 import fs from 'fs'
 import path from 'path'
@@ -30,7 +31,7 @@ export default async function PrintPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id} = await params
+  const { id } = await params
   const format = getFormatById(id)
 
   if (!format) {
@@ -39,6 +40,16 @@ export default async function PrintPage({
 
   const isHarold = id === '1'
   const haroldData = isHarold ? getHaroldExtendedData() : null
+  const isWarmupFormat = isWarmup(format)
+  const categoryLabels = {
+    'long-form': 'Длинная форма',
+    'short-form': 'Короткая форма',
+    warmup: 'Разминка',
+  } as const
+
+  const shortDescription = isWarmupFormat
+    ? format.shortDescription ?? format.fullDescription ?? format.description ?? ''
+    : format.shortDescription
 
   return (
     <>
@@ -72,34 +83,57 @@ export default async function PrintPage({
 
         {/* Content */}
         <main className="max-w-5xl mx-auto space-y-6">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            🌀 {format.name}
-          </h1>
-
-          <p className="text-xl text-gray-600 mb-6">
-            {format.shortDescription}
-          </p>
-
-          <div className="grid grid-cols-2 gap-4 text-sm mb-8">
-            <div>
-              <p className="text-gray-500">Игроки</p>
-              <p className="font-semibold">{format.minPlayers}–{format.maxPlayers} человек</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Длительность</p>
-              <p className="font-semibold">{format.duration}</p>
-            </div>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              🌀 {format.name}
+            </h1>
+            <span className="text-sm font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700">
+              {categoryLabels[format.formCategory]}
+            </span>
           </div>
 
-          {/* Description */}
-          <section className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">📖 Описание</h2>
-            <div className="space-y-3">
-              {format.fullDescription.split('\n\n').map((paragraph: string, idx: number) => (
-                <p key={idx} className="text-gray-700 leading-relaxed">{paragraph}</p>
-              ))}
+          {shortDescription && (
+            <p className="text-xl text-gray-600 mb-6">
+              {shortDescription}
+            </p>
+          )}
+
+          {isStructuredFormat(format) ? (
+            <div className="grid grid-cols-2 gap-4 text-sm mb-8">
+              <div>
+                <p className="text-gray-500">Игроки</p>
+                <p className="font-semibold">
+                  {format.minPlayers}–{format.maxPlayers} человек
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-500">Длительность</p>
+                <p className="font-semibold">{format.duration}</p>
+              </div>
             </div>
-          </section>
+          ) : (
+            <div className="text-sm mb-8">
+              <p className="text-gray-500">Тип разминки</p>
+              <p className="font-semibold">{format.warmupType}</p>
+            </div>
+          )}
+
+          {/* Description */}
+          {isStructuredFormat(format) ? (
+            <section className="mb-8">
+              <h2 className="text-2xl font-bold mb-4">📖 Описание</h2>
+              <div className="space-y-3">
+                {format.fullDescription.split('\n\n').map((paragraph: string, idx: number) => (
+                  <p key={idx} className="text-gray-700 leading-relaxed">{paragraph}</p>
+                ))}
+              </div>
+            </section>
+          ) : (
+            <section className="mb-8">
+              <h2 className="text-2xl font-bold mb-4">📖 Описание</h2>
+              <p className="text-gray-700 leading-relaxed whitespace-pre-line">{format.description}</p>
+            </section>
+          )}
 
           {/* Harold specific content */}
           {isHarold && haroldData && (
@@ -165,7 +199,7 @@ export default async function PrintPage({
             </>
           )}
 
-          {format.notes && (
+          {isStructuredFormat(format) && format.notes && (
             <section className="mb-8">
               <h2 className="text-2xl font-bold mb-4">💡 Заметки</h2>
               <p className="whitespace-pre-line">{format.notes}</p>

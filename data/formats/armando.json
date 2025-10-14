@@ -355,5 +355,6 @@
         "description": "Регулярные Armando-шоу в Вашингтоне, обучение формату"
       }
     ]
-  }
+  },
+  "formCategory": "long-form"
 }
