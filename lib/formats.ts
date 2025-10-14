@@ -109,11 +109,11 @@ export function filterFormats(filters: {
   }
 
   if (filters.minPlayers) {
-    formats = formats.filter(f => f.maxPlayers >= filters.minPlayers)
+    formats = formats.filter(f => f.maxPlayers >= filters.minPlayers!)
   }
 
   if (filters.maxPlayers) {
-    formats = formats.filter(f => f.minPlayers <= filters.maxPlayers)
+    formats = formats.filter(f => f.minPlayers <= filters.maxPlayers!)
   }
 
   if (filters.skills && filters.skills.length > 0) {
