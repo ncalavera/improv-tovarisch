@@ -1,8 +1,6 @@
 import { FormatsExplorer } from '@/components/FormatsExplorer'
 import { StickFigureIcon } from '@/components/StickFigureIcon'
 import Link from 'next/link'
-
-import { FormatsExplorer } from '@/components/FormatsExplorer'
 import { getFormats } from '@/lib/formats'
 
 export default function Home() {
