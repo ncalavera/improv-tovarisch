@@ -5,6 +5,7 @@ export interface Format {
   id: string
   name: string
   explored?: boolean
+  authorTag?: string
   shortDescription: string
   fullDescription: string
   minPlayers: number
@@ -68,10 +69,17 @@ export function getFormats(): Format[] {
       const format = JSON.parse(fileContent)
       return format
     })
-    // Sort by explored status (explored first), then alphabetically by name
+    // Sort by explored status (explored first), then by authorTag (Ivan Maska second), then alphabetically by name
     return formats.sort((a, b) => {
-      if (a.explored && !b.explored) return -1
-      if (!a.explored && b.explored) return 1
+      // Explored formats (Harold, Armando) come first
+      if (a.explored && !b.explored && !b.authorTag) return -1
+      if (!a.explored && !a.authorTag && b.explored) return 1
+
+      // Formats with authorTag (Ivan Maska) come second
+      if ((a.explored || a.authorTag) && !b.explored && !b.authorTag) return -1
+      if (!a.explored && !a.authorTag && (b.explored || b.authorTag)) return 1
+
+      // Within same group, sort alphabetically
       return a.name.localeCompare(b.name, 'ru')
     })
   } catch (error) {

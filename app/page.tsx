@@ -69,6 +69,11 @@ export default function Home() {
                         ⭐ Детально изучено
                       </span>
                     )}
+                    {format.authorTag && (
+                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        👤 {format.authorTag}
+                      </span>
+                    )}
                   </div>
                 </div>
 
