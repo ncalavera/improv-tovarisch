@@ -48,6 +48,13 @@ type VideoResource = {
   description?: string
 }
 
+type VideoPreview = {
+  platform: string
+  embedUrl?: string
+  preview?: string
+  canonicalUrl?: string
+}
+
 type BookResource = {
   title: string
   authors: string
@@ -182,13 +189,14 @@ function getVkEmbedUrl(url: string): { embedUrl: string; canonicalUrl: string } 
   }
 }
 
-function getVideoPreview(url: string) {
+function getVideoPreview(url: string): VideoPreview | null {
   const youtubeId = getYouTubeId(url)
   if (youtubeId) {
     return {
       platform: 'YouTube',
       embedUrl: `https://www.youtube-nocookie.com/embed/${youtubeId}`,
       preview: `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`,
+      canonicalUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
     }
   }
 
@@ -319,24 +327,49 @@ function ArmandoFlowDiagram({ stages }: { stages: Stage[] }) {
 
 function VideoEmbedCard({ video }: { video: VideoResource }) {
   const preview = getVideoPreview(video.url)
+  const targetUrl = preview?.canonicalUrl ?? video.url
+  const shouldRenderIframe = preview?.platform === 'VK Видео' && Boolean(preview.embedUrl)
 
   return (
     <article className="flex flex-col overflow-hidden rounded-2xl border border-violet-400/40 bg-slate-950/70 shadow-lg">
-      <div className="relative aspect-video bg-slate-900">
-        {preview?.embedUrl ? (
+      <div className="relative aspect-video overflow-hidden bg-slate-900">
+        {shouldRenderIframe ? (
           <iframe
             src={preview.embedUrl}
             title={video.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
             className="h-full w-full"
           />
         ) : preview?.preview ? (
-          <img src={preview.preview} alt={video.title} className="h-full w-full object-cover" loading="lazy" />
+          <>
+            <img
+              src={preview.preview}
+              alt={video.title}
+              className="h-full w-full object-cover transition duration-500 ease-out"
+              loading="lazy"
+            />
+            <a
+              href={targetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-black/20 text-white opacity-0 transition hover:opacity-100 focus-visible:opacity-100"
+            >
+              <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-black/70 text-3xl shadow-xl">
+                ▶
+              </span>
+              <span className="text-sm font-semibold uppercase tracking-wide">Смотреть</span>
+              <span className="sr-only">{`Открыть видео ${video.title}`}</span>
+            </a>
+          </>
         ) : (
           <div className="flex h-full w-full items-center justify-center text-sm text-slate-300">Предпросмотр недоступен</div>
         )}
+        {!shouldRenderIframe && preview?.preview ? (
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-slate-950/50 via-slate-950/0 to-slate-950/60" />
+        ) : null}
         {preview?.platform ? (
           <div className="pointer-events-none absolute left-4 bottom-4 inline-flex items-center gap-2 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white">
             {preview.platform}
@@ -345,7 +378,7 @@ function VideoEmbedCard({ video }: { video: VideoResource }) {
       </div>
       <div className="flex flex-col gap-2 p-5 text-slate-100">
         <h3 className="text-lg font-semibold leading-snug">
-          <a href={preview?.canonicalUrl ?? video.url} target="_blank" rel="noopener noreferrer" className="hover:text-violet-200 transition">
+          <a href={targetUrl} target="_blank" rel="noopener noreferrer" className="transition hover:text-violet-200">
             {video.title}
           </a>
         </h3>
@@ -487,6 +520,9 @@ export function ArmandoPrototypeView({
           defaultOpen
           className="border-white/15 bg-white/5 backdrop-blur"
           contentClassName="text-slate-100"
+          headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+          titleClassName="text-white drop-shadow-sm"
+          chevronClassName="text-violet-100"
         >
           <div className="space-y-4 text-base leading-relaxed">
             {description.map((paragraph, index) => (
@@ -500,6 +536,9 @@ export function ArmandoPrototypeView({
           defaultOpen
           className="border-white/15 bg-white/5 backdrop-blur"
           contentClassName="space-y-6 text-slate-100"
+          headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+          titleClassName="text-white drop-shadow-sm"
+          chevronClassName="text-violet-100"
         >
           <p className="text-base leading-relaxed text-slate-100/90">{structure.overview}</p>
           <ArmandoFlowDiagram stages={structure.stages} />
@@ -516,6 +555,9 @@ export function ArmandoPrototypeView({
             defaultOpen
             className="border-white/15 bg-white/5 backdrop-blur"
             contentClassName="space-y-6 text-slate-100"
+            headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+            titleClassName="text-white drop-shadow-sm"
+            chevronClassName="text-violet-100"
           >
             <p className="text-base leading-relaxed text-slate-100/90">
               Armando начинается с монолога, который задаёт эмоциональный вектор шоу. Популярные подходы к построению монологов:
@@ -557,6 +599,9 @@ export function ArmandoPrototypeView({
           defaultOpen
           className="border-white/15 bg-white/5 backdrop-blur"
           contentClassName="space-y-8 text-slate-100"
+          headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+          titleClassName="text-white drop-shadow-sm"
+          chevronClassName="text-violet-100"
         >
           <div className="space-y-3">
             <h3 className="text-xl font-semibold text-white">Что делает сцены Armando уникальными</h3>
@@ -640,6 +685,9 @@ export function ArmandoPrototypeView({
             defaultOpen
             className="border-white/15 bg-white/5 backdrop-blur"
             contentClassName="space-y-6 text-slate-100"
+            headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+            titleClassName="text-white drop-shadow-sm"
+            chevronClassName="text-violet-100"
           >
             <div className="flex flex-wrap gap-4">
               {example.theme ? (
@@ -695,6 +743,9 @@ export function ArmandoPrototypeView({
             defaultOpen
             className="border-white/15 bg-white/5 backdrop-blur"
             contentClassName="space-y-6 text-slate-100"
+            headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+            titleClassName="text-white drop-shadow-sm"
+            chevronClassName="text-violet-100"
           >
             {videos.featured.length ? (
               <div className="grid gap-5 md:grid-cols-2">
@@ -722,6 +773,9 @@ export function ArmandoPrototypeView({
             defaultOpen
             className="border-white/15 bg-white/5 backdrop-blur"
             contentClassName="space-y-6 text-slate-100"
+            headerClassName="text-slate-100/90 hover:bg-violet-500/10"
+            titleClassName="text-white drop-shadow-sm"
+            chevronClassName="text-violet-100"
           >
             {resources.links.length ? (
               <div className="space-y-3">
