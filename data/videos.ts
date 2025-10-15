@@ -4,6 +4,7 @@ export type VideoResource = {
   url: string
   platform: 'YouTube' | 'VK Видео' | string
   previewImage?: string
+  embedUrl?: string
   description?: string
   authorName?: string
   duration?: string
@@ -211,6 +212,7 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
         url: identifiers.canonicalUrl,
         platform: source.platform,
         previewImage: data.thumbnail_url ?? getFallbackPreview(source, identifiers.contentId),
+        embedUrl: identifiers.embedUrl,
         authorName: data.author_name,
         duration: source.duration,
         metadataSource: 'oEmbed'
@@ -223,6 +225,10 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
   const canonicalUrl = source.platform === 'VK Видео' ? normalizeVkUrl(source.url) : source.url
   const fallbackUrl = source.platform === 'VK Видео' ? canonicalUrl : source.url
   const id = source.platform === 'YouTube' ? extractYouTubeId(source.url) : extractVkId(canonicalUrl)
+  const identifiers =
+    source.platform === 'VK Видео'
+      ? parseVkVideoIdentifiers(source.url)
+      : undefined
 
   return {
     id,
@@ -230,6 +236,7 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
     url: fallbackUrl,
     platform: source.platform,
     previewImage: getFallbackPreview(source, id),
+    embedUrl: identifiers?.embedUrl,
     duration: source.duration,
     metadataSource: 'fallback'
   }
