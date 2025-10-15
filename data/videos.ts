@@ -25,6 +25,15 @@ type VkVideoIdentifiers = {
   embedUrl: string
 }
 
+const VIDEO_METADATA_OVERRIDES: Record<string, Partial<Pick<VideoResource, 'title' | 'authorName'>>> = {
+  ['video-229967683_456239039']: {
+    title: 'Только для сумасшедших: Истории Дела Клоуза'
+  },
+  ['video-100024679_456239126']: {
+    title: 'The Upright Citizens Brigade: Asssscat!'
+  }
+}
+
 const VIDEO_SOURCES: VideoSource[] = [
   {
     url: 'https://vkvideo.ru/video-229967683_456239039',
@@ -205,17 +214,17 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
         throw new Error(`Не удалось распознать идентификаторы VK для ${source.url}`)
       }
 
-      const data = await fetchOEmbed(identifiers.embedUrl, 'https://vk.com/oembed')
+      const overrides = VIDEO_METADATA_OVERRIDES[identifiers.contentId]
       return {
         id: identifiers.contentId,
-        title: data.title ?? identifiers.canonicalUrl,
+        title: overrides?.title ?? `${source.platform} • ${identifiers.contentId}`,
         url: identifiers.canonicalUrl,
         platform: source.platform,
-        previewImage: data.thumbnail_url ?? getFallbackPreview(source, identifiers.contentId),
+        previewImage: getFallbackPreview(source, identifiers.contentId),
         embedUrl: identifiers.embedUrl,
-        authorName: data.author_name,
+        authorName: overrides?.authorName,
         duration: source.duration,
-        metadataSource: 'oEmbed'
+        metadataSource: 'fallback'
       }
     }
   } catch (error) {
@@ -229,14 +238,16 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
     source.platform === 'VK Видео'
       ? parseVkVideoIdentifiers(source.url)
       : undefined
+  const overrides = VIDEO_METADATA_OVERRIDES[id]
 
   return {
     id,
-    title: `${source.platform} • ${id}`,
+    title: overrides?.title ?? `${source.platform} • ${id}`,
     url: fallbackUrl,
     platform: source.platform,
     previewImage: getFallbackPreview(source, id),
     embedUrl: identifiers?.embedUrl,
+    authorName: overrides?.authorName,
     duration: source.duration,
     metadataSource: 'fallback'
   }
