@@ -205,7 +205,7 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
         throw new Error(`Не удалось распознать идентификаторы VK для ${source.url}`)
       }
 
-      const data = await fetchOEmbed(identifiers.embedUrl, 'https://vk.com/oembed')
+      const data = await fetchOEmbed(identifiers.canonicalUrl, 'https://vk.com/oembed')
       return {
         id: identifiers.contentId,
         title: data.title ?? identifiers.canonicalUrl,
