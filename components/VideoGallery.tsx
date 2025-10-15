@@ -12,7 +12,17 @@ function VideoCard({ video }: { video: VideoResource }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700/60 dark:bg-gray-800">
       <div className="relative aspect-video overflow-hidden bg-gray-200 dark:bg-gray-700">
-        {video.previewImage ? (
+        {video.platform === 'VK Видео' && video.embedUrl ? (
+          <iframe
+            src={video.embedUrl}
+            title={video.title}
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className="h-full w-full"
+          />
+        ) : video.previewImage ? (
           <img
             src={video.previewImage}
             alt={video.title}
