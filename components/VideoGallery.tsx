@@ -3,12 +3,6 @@ import Link from 'next/link'
 import type { VideoResource } from '@/data/videos'
 
 function VideoCard({ video }: { video: VideoResource }) {
-  const infoLine = video.duration ?? (video.authorName ? `Автор: ${video.authorName}` : undefined)
-  const metadataNote =
-    video.metadataSource === 'oEmbed'
-      ? 'Превью и описание загружены автоматически'
-      : 'Не удалось получить метаданные, показано резервное превью'
-
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700/60 dark:bg-gray-800">
       <div className="relative aspect-video overflow-hidden bg-gray-200 dark:bg-gray-700">
@@ -40,33 +34,11 @@ function VideoCard({ video }: { video: VideoResource }) {
         </div>
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-300">
-            <Link href={video.url} target="_blank" rel="noreferrer" prefetch={false}>
-              {video.title}
-            </Link>
-          </h3>
-          {video.description ? (
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{video.description}</p>
-          ) : video.authorName ? (
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Канал: {video.authorName}</p>
-          ) : null}
-        </div>
-        <div className="mt-auto space-y-2">
-          <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-            {infoLine ? <span>{infoLine}</span> : <span aria-hidden="true">&nbsp;</span>}
-            <Link
-              href={video.url}
-              target="_blank"
-              rel="noreferrer"
-              prefetch={false}
-              className="inline-flex items-center gap-1 text-blue-600 transition hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              Смотреть →
-            </Link>
-          </div>
-          <p className="text-xs text-gray-400 dark:text-gray-500">{metadataNote}</p>
-        </div>
+        <h3 className="text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-300">
+          <Link href={video.url} target="_blank" rel="noreferrer" prefetch={false}>
+            {video.title}
+          </Link>
+        </h3>
       </div>
     </article>
   )
