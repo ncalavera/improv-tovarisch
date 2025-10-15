@@ -8,6 +8,8 @@ interface CollapsibleProps {
   children: ReactNode
   defaultOpen?: boolean
   variant?: 'default' | 'primary' | 'warning'
+  className?: string
+  contentClassName?: string
 }
 
 export function Collapsible({
@@ -16,6 +18,8 @@ export function Collapsible({
   children,
   defaultOpen = false,
   variant = 'default',
+  className,
+  contentClassName,
 }: CollapsibleProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
@@ -40,7 +44,7 @@ export function Collapsible({
   const styles = variantStyles[variant]
 
   return (
-    <div className={`rounded-lg border shadow-sm ${styles.container}`}>
+    <div className={`rounded-lg border shadow-sm ${styles.container} ${className ?? ''}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-6 py-4 flex items-center justify-between transition-colors ${styles.header}`}
@@ -67,7 +71,7 @@ export function Collapsible({
           />
         </svg>
       </button>
-      {isOpen && <div className="px-6 pb-6 pt-2">{children}</div>}
+      {isOpen && <div className={`px-6 pb-6 pt-2 ${contentClassName ?? ''}`}>{children}</div>}
     </div>
   )
 }
