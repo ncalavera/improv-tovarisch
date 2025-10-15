@@ -4,8 +4,8 @@ import { VideoGallery } from '@/components/VideoGallery'
 import { StickFigureIcon } from '@/components/StickFigureIcon'
 import { getVideos } from '@/data/videos'
 
-export default function VideosPage() {
-  const videos = getVideos()
+export default async function VideosPage() {
+  const videos = await getVideos()
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -19,9 +19,7 @@ export default function VideosPage() {
                 <span className="sr-only">Улыбающийся человечек</span>
               </span>
             </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Видеоархив импровизационных выступлений
-            </p>
+            <p className="text-gray-600 dark:text-gray-400 mt-1">Видеоархив импровизационных выступлений</p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/"
