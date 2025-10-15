@@ -217,46 +217,34 @@
   "resources": {
     "videos": [
       {
-        "title": "ASSSSCAT (UCB) - Полное шоу на Tubi",
-        "url": "https://tubitv.com/movies/255774/upright-citizens-brigade-asssscat",
+        "title": "Improv Conspiracy: Armando Diaz Experience (2023)",
+        "url": "https://www.youtube.com/watch?v=xMR4AkJu94g&t=1589s&pp=ygUZaW1wcm92IGNvbnNwaXJhY3kgYXJtYW5kbw%3D%3D",
         "lang": "EN",
-        "description": "Профессиональное ASSSSCAT шоу с Amy Poehler, Will Arnett и другими звездами UCB. Полное 55-минутное выступление, бесплатно на Tubi. Лучший пример формата от мастеров."
+        "description": "Запись шоу Armando Diaz Experience в исполнении The Improv Conspiracy. Плотный монтаж, живые подсказки зрителей и полный просмотр от монолога до финала."
       },
       {
-        "title": "ASSSSCAT на Netflix",
-        "url": "https://www.netflix.com/title/70072085",
+        "title": "Improv Conspiracy: Armando Showcase (2020)",
+        "url": "https://www.youtube.com/watch?v=k8E5yRQWn04&t=710s&pp=ygUZaW1wcm92IGNvbnNwaXJhY3kgYXJtYW5kbw%3D%3D",
         "lang": "EN",
-        "description": "ASSSSCAT #3000 (2007) - записанное шоу UCB с участием Amy Poehler, Ian Roberts, Matt Besser, Matt Walsh"
+        "description": "Армандо с живым ведущим и монологистом. Хороший пример переходов от монолога к сериям сцен и возвратов к теме."
       },
       {
-        "title": "ASSSSCAT на Amazon Prime",
-        "url": "https://www.amazon.com/Upright-Citizens-Brigade-Eric-Cochran/dp/B001KWPP0W",
+        "title": "Improv Conspiracy: Armando Harold Night",
+        "url": "https://www.youtube.com/watch?v=7CrddUFzsA4&pp=ygUZaW1wcm92IGNvbnNwaXJhY3kgYXJtYW5kbw%3D%3D",
         "lang": "EN",
-        "description": "ASSSSCAT от Upright Citizens Brigade, доступно для покупки/аренды"
+        "description": "Полноценное Armando шоу с австралийской труппой. Видно работу монологиста и то, как импровизаторы подхватывают образы."
       },
       {
-        "title": "YouTube: UCB ASSSSCAT",
-        "url": "https://www.youtube.com/results?search_query=UCB+ASSSSCAT",
+        "title": "UCB Armando с приглашённым монологистом",
+        "url": "https://www.youtube.com/watch?v=1GBY85ZlAug&pp=ygUZaW1wcm92IGNvbnNwaXJhY3kgYXJtYW5kb9IHCQn8CQGHKiGM7w%3D%3D",
         "lang": "EN",
-        "description": "Поиск примеров ASSSSCAT на YouTube - множество клипов и полных выступлений"
+        "description": "Нью-йоркская команда Upright Citizens Brigade. Демонстрация классического Armando формата с гостевым монологистом."
       },
       {
-        "title": "YouTube: Armando improv format",
-        "url": "https://www.youtube.com/results?search_query=Armando+improv+format",
+        "title": "Second City: Armando с живым концертом",
+        "url": "https://www.youtube.com/watch?v=olhr8BqY_Xo&pp=ygUZaW1wcm92IGNvbnNwaXJhY3kgYXJtYW5kbw%3D%3D",
         "lang": "EN",
-        "description": "Поиск примеров и обучающих видео о формате Armando"
-      },
-      {
-        "title": "The Improv Conspiracy - Armando Format Explained",
-        "url": "https://www.youtube.com/results?search_query=improv+conspiracy+armando",
-        "lang": "EN",
-        "description": "Melbourne импров-театр с хорошими обучающими материалами о Armando"
-      },
-      {
-        "title": "Smile:) Театр - Harold и Armando в Москве",
-        "url": "https://smile-theater.ru/shkola-akterskogo-masterstva/improvizacionnye-spektakli-v-stile-harold-i-armando/",
-        "lang": "RU",
-        "description": "Живые выступления Armando в Москве, курсы импровизации"
+        "description": "Армандо в исполнении Second City Training Center. Есть живые музыкальные вставки и разнообразные стили сцен."
       }
     ],
     "books": [

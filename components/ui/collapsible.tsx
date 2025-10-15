@@ -8,6 +8,11 @@ interface CollapsibleProps {
   children: ReactNode
   defaultOpen?: boolean
   variant?: 'default' | 'primary' | 'warning'
+  className?: string
+  contentClassName?: string
+  headerClassName?: string
+  titleClassName?: string
+  chevronClassName?: string
 }
 
 export function Collapsible({
@@ -16,6 +21,11 @@ export function Collapsible({
   children,
   defaultOpen = false,
   variant = 'default',
+  className,
+  contentClassName,
+  headerClassName,
+  titleClassName,
+  chevronClassName,
 }: CollapsibleProps) {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
@@ -39,22 +49,42 @@ export function Collapsible({
 
   const styles = variantStyles[variant]
 
+  const composeClasses = (
+    ...classes: Array<string | null | undefined | false>
+  ) => classes.filter(Boolean).join(' ')
+
+  const containerClasses = composeClasses('rounded-lg border shadow-sm', styles.container, className)
+
+  const headerClasses = composeClasses(
+    'w-full px-6 py-4 flex items-center justify-between transition-colors',
+    styles.header,
+    headerClassName,
+  )
+
+  const titleClasses = composeClasses('text-xl font-semibold text-left', styles.title, titleClassName)
+
+  const chevronClasses = composeClasses(
+    'w-5 h-5 transition-transform',
+    isOpen ? 'rotate-180' : '',
+    styles.title,
+    chevronClassName,
+  )
+
   return (
-    <div className={`rounded-lg border shadow-sm ${styles.container}`}>
+    <div className={containerClasses}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-6 py-4 flex items-center justify-between transition-colors ${styles.header}`}
+        className={headerClasses}
       >
         <div className="flex items-center gap-3">
           {icon && <span className="text-2xl">{icon}</span>}
-          <h2 className={`text-xl font-semibold text-left ${styles.title}`}>
+          <h2 className={titleClasses}>
             {title}
           </h2>
         </div>
         <svg
-          className={`w-5 h-5 transition-transform ${
-            isOpen ? 'rotate-180' : ''
-          } ${styles.title}`}
+          className={chevronClasses}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -67,7 +97,7 @@ export function Collapsible({
           />
         </svg>
       </button>
-      {isOpen && <div className="px-6 pb-6 pt-2">{children}</div>}
+      {isOpen && <div className={`px-6 pb-6 pt-2 ${contentClassName ?? ''}`}>{children}</div>}
     </div>
   )
 }

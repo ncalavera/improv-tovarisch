@@ -36,6 +36,12 @@ export default function Home() {
               >
                 Видео
               </Link>
+              <Link
+                href="/prototype/armando"
+                className="inline-flex items-center justify-center rounded-full border border-purple-500 px-5 py-2 text-sm font-semibold text-purple-600 transition hover:bg-purple-50 dark:text-purple-300 dark:hover:bg-purple-900/40"
+              >
+                🎙️ Армандо — прототип
+              </Link>
             </div>
           </div>
         </div>
