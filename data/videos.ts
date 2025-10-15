@@ -21,6 +21,10 @@ const VIDEO_SOURCES: VideoSource[] = [
     platform: 'VK Видео'
   },
   {
+    url: 'https://vk.com/video-100024679_456239126',
+    platform: 'VK Видео'
+  },
+  {
     url: 'https://www.youtube.com/watch?v=sVKInDHnsSU',
     platform: 'YouTube'
   },
@@ -39,6 +43,21 @@ function extractYouTubeId(url: string) {
 function extractVkId(url: string) {
   const match = url.match(/video-?\d+_\d+/)
   return match ? match[0] : url
+}
+
+function normalizeVkUrl(url: string) {
+  try {
+    const parsed = new URL(url)
+    if (parsed.hostname === 'vkvideo.ru') {
+      parsed.hostname = 'vk.com'
+    }
+    parsed.search = ''
+    parsed.hash = ''
+    return parsed.toString()
+  } catch (error) {
+    console.error('Failed to normalize VK url', error)
+    return url
+  }
 }
 
 async function fetchOEmbed(url: string, endpoint: string) {
@@ -74,9 +93,10 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource | null> 
     }
 
     if (source.platform === 'VK Видео') {
-      const data = await fetchOEmbed(source.url, 'https://vk.com/oembed')
+      const canonicalUrl = normalizeVkUrl(source.url)
+      const data = await fetchOEmbed(canonicalUrl, 'https://vk.com/oembed')
       return {
-        id: extractVkId(source.url),
+        id: extractVkId(canonicalUrl),
         title: data.title ?? source.url,
         url: source.url,
         platform: source.platform,
