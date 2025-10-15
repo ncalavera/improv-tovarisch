@@ -91,20 +91,47 @@ function decodeHtmlEntities(value: string) {
 }
 
 function extractMetaContent(html: string, property: string) {
-  const tagPattern = new RegExp(`<meta[^>]+property=["']${property}["'][^>]*>`, 'i')
-  const tagMatch = html.match(tagPattern)
+  const metaTagPattern = /<meta\b[^>]*>/gi
+  const normalizedProperty = property.toLowerCase()
 
-  if (!tagMatch) {
-    return undefined
+  for (const tagMatch of html.matchAll(metaTagPattern)) {
+    const attributes: Record<string, string> = {}
+    const attributePattern = /([a-z0-9:-]+)\s*=\s*(["'])(.*?)\2/gi
+    let attributeMatch: RegExpExecArray | null
+
+    while ((attributeMatch = attributePattern.exec(tagMatch[0])) !== null) {
+      const [, name, , value] = attributeMatch
+      attributes[name.toLowerCase()] = value
+    }
+
+    const key = (attributes.property ?? attributes.name)?.toLowerCase()
+
+    if (key === normalizedProperty) {
+      const content = attributes.content
+
+      if (content) {
+        return decodeHtmlEntities(content)
+      }
+    }
   }
 
-  const contentMatch = tagMatch[0].match(/content=["']([^"']+)["']/i)
+  return undefined
+}
 
-  if (!contentMatch) {
-    return undefined
+function extractVkEmbedContentId(embedUrl: string) {
+  try {
+    const parsed = new URL(embedUrl)
+    const ownerId = parsed.searchParams.get('oid')
+    const videoId = parsed.searchParams.get('id')
+
+    if (ownerId && videoId) {
+      return `video${ownerId}_${videoId}`
+    }
+  } catch (error) {
+    console.error('Failed to parse VK embed url', error)
   }
 
-  return decodeHtmlEntities(contentMatch[1])
+  return undefined
 }
 
 async function fetchVkEmbedMetadata(embedUrl: string) {
@@ -118,11 +145,31 @@ async function fetchVkEmbedMetadata(embedUrl: string) {
 
   const html = await response.text()
 
+  console.debug(
+    'Fetched VK embed HTML snippet for %s: %s',
+    embedUrl,
+    html.slice(0, 500)
+  )
+
+  const title = extractMetaContent(html, 'og:title')
+  const description = extractMetaContent(html, 'og:description')
+  const thumbnail = extractMetaContent(html, 'og:image')
+  const player = extractMetaContent(html, 'og:video')
+  const fallbackContentId = extractVkEmbedContentId(embedUrl)
+
+  const fallbackThumbnail = thumbnail ??
+    createSvgPreview({
+      title: 'VK Видео',
+      subtitle: fallbackContentId,
+      accent: '#2787f5',
+      background: '#0b1120'
+    })
+
   return {
-    title: extractMetaContent(html, 'og:title'),
-    description: extractMetaContent(html, 'og:description'),
-    thumbnail: extractMetaContent(html, 'og:image'),
-    player: extractMetaContent(html, 'og:video')
+    title: title ?? 'VK Видео',
+    description,
+    thumbnail: fallbackThumbnail,
+    player
   }
 }
 
