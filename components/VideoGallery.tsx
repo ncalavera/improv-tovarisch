@@ -5,9 +5,9 @@ import type { VideoResource } from '@/data/videos'
 function VideoCard({ video }: { video: VideoResource }) {
   const infoLine = video.duration ?? (video.authorName ? `Автор: ${video.authorName}` : undefined)
   const metadataNote =
-    video.metadataSource === 'oEmbed'
-      ? 'Превью и описание загружены автоматически'
-      : 'Не удалось получить метаданные, показано резервное превью'
+    video.metadataSource === 'fallback'
+      ? 'Не удалось получить метаданные, показано резервное превью'
+      : 'Превью и описание загружены автоматически'
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700/60 dark:bg-gray-800">

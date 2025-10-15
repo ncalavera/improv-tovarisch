@@ -7,7 +7,7 @@ export type VideoResource = {
   description?: string
   authorName?: string
   duration?: string
-  metadataSource: 'oEmbed' | 'fallback'
+  metadataSource: 'oEmbed' | 'embed' | 'fallback'
 }
 
 type VideoSource = {
@@ -76,6 +76,53 @@ function parseVkVideoIdentifiers(url: string): VkVideoIdentifiers | undefined {
   } catch (error) {
     console.error('Failed to parse VK video url', error)
     return undefined
+  }
+}
+
+function decodeHtmlEntities(value: string) {
+  return value
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/gi, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+}
+
+function extractMetaContent(html: string, property: string) {
+  const tagPattern = new RegExp(`<meta[^>]+property=["']${property}["'][^>]*>`, 'i')
+  const tagMatch = html.match(tagPattern)
+
+  if (!tagMatch) {
+    return undefined
+  }
+
+  const contentMatch = tagMatch[0].match(/content=["']([^"']+)["']/i)
+
+  if (!contentMatch) {
+    return undefined
+  }
+
+  return decodeHtmlEntities(contentMatch[1])
+}
+
+async function fetchVkEmbedMetadata(embedUrl: string) {
+  const response = await fetch(embedUrl, {
+    next: { revalidate: 3600 }
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to load VK embed HTML for ${embedUrl}`)
+  }
+
+  const html = await response.text()
+
+  return {
+    title: extractMetaContent(html, 'og:title'),
+    description: extractMetaContent(html, 'og:description'),
+    thumbnail: extractMetaContent(html, 'og:image'),
+    player: extractMetaContent(html, 'og:video')
   }
 }
 
@@ -204,16 +251,21 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
         throw new Error(`Не удалось распознать идентификаторы VK для ${source.url}`)
       }
 
-      const data = await fetchOEmbed(identifiers.embedUrl, 'https://vk.com/oembed')
+      const metadata = await fetchVkEmbedMetadata(identifiers.embedUrl)
+
+      const previewImage = metadata.thumbnail ?? getFallbackPreview(source, identifiers.contentId)
+      const title = metadata.title ?? identifiers.canonicalUrl
+      const description = metadata.description
+
       return {
         id: identifiers.contentId,
-        title: data.title ?? identifiers.canonicalUrl,
+        title,
         url: identifiers.canonicalUrl,
         platform: source.platform,
-        previewImage: data.thumbnail_url ?? getFallbackPreview(source, identifiers.contentId),
-        authorName: data.author_name,
+        previewImage,
+        description,
         duration: source.duration,
-        metadataSource: 'oEmbed'
+        metadataSource: 'embed'
       }
     }
   } catch (error) {
