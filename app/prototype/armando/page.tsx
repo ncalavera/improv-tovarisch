@@ -11,6 +11,21 @@ type Stage = {
   subtitle?: string
 }
 
+type ExampleScene = {
+  number: number
+  description: string
+}
+
+type ExampleRound = {
+  number: number
+  monologue: {
+    duration: string
+    summary: string
+    keyDetails?: string[]
+  }
+  scenes: ExampleScene[]
+}
+
 function ArmandoFlowDiagram({ stages }: { stages: Stage[] }) {
   const stageWidth = 180
   const stageHeight = 86
@@ -167,7 +182,10 @@ export default function ArmandoPrototypePage() {
       subtitle: component.duration ?? undefined,
     }))
 
-  const exampleRounds = format.example?.rounds ?? []
+  const rawExampleRounds = format.example?.rounds
+  const exampleRounds: ExampleRound[] = Array.isArray(rawExampleRounds)
+    ? (rawExampleRounds as ExampleRound[])
+    : []
   const exampleScenes = exampleRounds.flatMap((round) =>
     round.scenes.map((scene) => ({
       round: round.number,
