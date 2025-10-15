@@ -1,21 +1,54 @@
+"use client"
+
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 import type { VideoResource } from '@/data/videos'
+import { fetchVkEmbedMetadata } from '@/lib/vk-metadata'
 
 function VideoCard({ video }: { video: VideoResource }) {
+  const [meta, setMeta] = useState<{ title?: string; thumbnail?: string; description?: string }>({})
+
+  useEffect(() => {
+    let isMounted = true
+    setMeta({})
+
+    if (video.platform === 'VK Видео' && video.metadataSource === 'client') {
+      fetchVkEmbedMetadata(video.url).then((data) => {
+        if (isMounted && data) {
+          setMeta({
+            title: data.title,
+            thumbnail: data.thumbnail,
+            description: data.description
+          })
+        }
+      })
+    }
+
+    return () => {
+      isMounted = false
+    }
+  }, [video])
+
+  const title = meta.title ?? video.title
+  const preview = meta.thumbnail ?? video.previewImage
+  const description = meta.description ?? video.description
+
   const infoLine = video.duration ?? (video.authorName ? `Автор: ${video.authorName}` : undefined)
   const metadataNote =
     video.metadataSource === 'oEmbed'
       ? 'Превью и описание загружены автоматически'
-      : 'Не удалось получить метаданные, показано резервное превью'
+      : video.metadataSource === 'client'
+        ? 'Превью загружается после открытия страницы'
+        : 'Не удалось получить метаданные, показано резервное превью'
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700/60 dark:bg-gray-800">
       <div className="relative aspect-video overflow-hidden bg-gray-200 dark:bg-gray-700">
-        {video.previewImage ? (
+        {preview ? (
           <img
-            src={video.previewImage}
-            alt={video.title}
+            src={preview}
+            alt={title}
             loading="lazy"
             className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
           />
@@ -33,11 +66,11 @@ function VideoCard({ video }: { video: VideoResource }) {
         <div>
           <h3 className="text-lg font-semibold text-gray-900 transition group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-300">
             <Link href={video.url} target="_blank" rel="noreferrer" prefetch={false}>
-              {video.title}
+              {title}
             </Link>
           </h3>
-          {video.description ? (
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{video.description}</p>
+          {description ? (
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{description}</p>
           ) : video.authorName ? (
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">Канал: {video.authorName}</p>
           ) : null}

@@ -7,7 +7,7 @@ export type VideoResource = {
   description?: string
   authorName?: string
   duration?: string
-  metadataSource: 'oEmbed' | 'fallback'
+  metadataSource: 'oEmbed' | 'fallback' | 'client'
 }
 
 type VideoSource = {
@@ -204,16 +204,14 @@ async function resolveVideo(source: VideoSource): Promise<VideoResource> {
         throw new Error(`Не удалось распознать идентификаторы VK для ${source.url}`)
       }
 
-      const data = await fetchOEmbed(identifiers.embedUrl, 'https://vk.com/oembed')
       return {
         id: identifiers.contentId,
-        title: data.title ?? identifiers.canonicalUrl,
+        title: 'VK Видео',
         url: identifiers.canonicalUrl,
         platform: source.platform,
-        previewImage: data.thumbnail_url ?? getFallbackPreview(source, identifiers.contentId),
-        authorName: data.author_name,
+        previewImage: getFallbackPreview(source, identifiers.contentId),
         duration: source.duration,
-        metadataSource: 'oEmbed'
+        metadataSource: 'client'
       }
     }
   } catch (error) {
