@@ -514,12 +514,20 @@ export function ArmandoPrototypeView({
             ))}
           </div>
 
-          <Link
-            href="/prototype/armando/infographic"
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-300/60 hover:text-emerald-50 md:w-auto"
-          >
-            <span aria-hidden>🗺️</span> Интерактивная инфографика формата
-          </Link>
+          <div className="mt-6 flex flex-col gap-3 md:flex-row">
+            <Link
+              href="/prototype/armando/infographic"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-300/60 hover:text-emerald-50 md:w-auto"
+            >
+              <span aria-hidden>🗺️</span> Интерактивная инфографика формата
+            </Link>
+            <Link
+              href="/prototype/armando/infographic/nebula"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-sky-400/40 bg-sky-500/15 px-5 py-3 text-sm font-semibold text-sky-100 transition hover:border-sky-300/60 hover:text-sky-50 md:w-auto"
+            >
+              <span aria-hidden>🌌</span> Nebula инфографика прототипа
+            </Link>
+          </div>
         </section>
 
         <Collapsible
