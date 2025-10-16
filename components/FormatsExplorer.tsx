@@ -370,7 +370,7 @@ export function FormatsExplorer({ formats }: Props) {
 
           return (
             <Link key={format.id} href={`/formats/${format.id}`} className="group">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700 h-full">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 h-full transform transition-transform duration-200 ease-out group-hover:scale-[1.02] group-hover:shadow-md">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-wrap gap-2">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-900/60 dark:text-slate-200">
