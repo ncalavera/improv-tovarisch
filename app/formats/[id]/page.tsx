@@ -45,20 +45,20 @@ export default async function FormatPage({
     : format.shortDescription
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-neutral-100 dark:bg-neutral-950">
       {/* Header */}
-      <header className="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b border-neutral-200 dark:border-neutral-800 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link
               href="/"
-              className="text-blue-600 dark:text-blue-400 hover:underline text-sm"
+              className="text-sm font-medium text-[color:var(--accent)] hover:underline transition-colors"
             >
               ← Назад к списку
             </Link>
             <Link
               href={`/formats/${id}/print`}
-              className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+              className="text-sm font-medium bg-[color:var(--accent)] text-white px-3 py-1.5 rounded hover:opacity-90 transition-opacity"
             >
               🖨️ Версия для печати
             </Link>
@@ -75,22 +75,22 @@ export default async function FormatPage({
               🌀 {format.name}
             </h1>
             <div className="flex flex-wrap gap-2 justify-end">
-              <span className="text-sm font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-900/70 dark:text-slate-200">
+              <span className="text-sm font-semibold px-3 py-1 rounded-full bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
                 {categoryLabels[format.formCategory]}
               </span>
               {isWarmupFormat ? (
-                <span className="text-sm font-semibold px-3 py-1 rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/70 dark:text-orange-200">
+                <span className="text-sm font-semibold px-3 py-1 rounded-full border border-[color:var(--accent)] text-[color:var(--accent)] bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_20%,black)]">
                   🎯 {format.warmupType}
                 </span>
               ) : (
                 <>
                   {format.explored && (
-                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                    <span className="text-sm font-semibold px-3 py-1 rounded-full border border-[color:var(--accent)] text-[color:var(--accent)] bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_20%,black)]">
                       ⭐ Детально изучено
                     </span>
                   )}
                   {'authorTag' in format && format.authorTag && (
-                    <span className="text-sm font-semibold px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                    <span className="text-sm font-semibold px-3 py-1 rounded-full border border-[color:var(--accent)] text-[color:var(--accent)] bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_20%,black)]">
                       👤 {format.authorTag}
                     </span>
                   )}
@@ -157,13 +157,14 @@ export default async function FormatPage({
         {isHarold && (
           <Collapsible title="Структура сцен" icon="🧱" defaultOpen={true}>
             <div className="mb-4">
-              <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-6 font-mono text-sm text-center">
-                <div className="text-gray-700 dark:text-gray-300">
-                  <strong>Opening</strong> → <span className="text-green-600 dark:text-green-400">A1 B1 C1</span> →
-                  <span className="text-orange-600 dark:text-orange-400"> Group Game 1</span> →
-                  <span className="text-purple-600 dark:text-purple-400"> A2 B2 C2</span> →
-                  <span className="text-orange-600 dark:text-orange-400"> Group Game 2</span> →
-                  <span className="text-red-600 dark:text-red-400"> A3 B3 C3 (финал)</span>
+              <div className="bg-neutral-100 dark:bg-neutral-900 rounded-lg p-6 font-mono text-sm text-center">
+                <div className="text-neutral-700 dark:text-neutral-300">
+                  <strong>Opening</strong> →{' '}
+                  <span className="font-semibold text-[color:var(--accent)]">A1 B1 C1</span> →
+                  <span className="text-[color:var(--accent)]"> Group Game 1</span> →
+                  <span className="text-[color:var(--accent)]"> A2 B2 C2</span> →
+                  <span className="text-[color:var(--accent)]"> Group Game 2</span> →
+                  <span className="text-[color:var(--accent)]"> A3 B3 C3 (финал)</span>
                 </div>
               </div>
             </div>
@@ -183,7 +184,7 @@ export default async function FormatPage({
                 href="https://www.behance.net/gallery/56737073/The-Harold-Infographic-Poster-%28-Other-Improv-Forms%29"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-blue-600 dark:text-blue-400 hover:underline"
+                className="text-sm text-[color:var(--accent)] hover:underline"
               >
                 Альтернативная инфографика на Behance →
               </a>
@@ -205,7 +206,7 @@ export default async function FormatPage({
               {format.openings.map((opening: any, idx: number) => {
                 const icons = ['🎯', '📖', '🎭', '🎨']
                 return (
-                  <div key={idx} className="border-l-4 border-blue-500 dark:border-blue-400 pl-6 py-3">
+                  <div key={idx} className="border-l-4 border-[color:var(--accent)] pl-6 py-3">
                     <div className="flex gap-4 items-start mb-3">
                       <span className="text-3xl flex-shrink-0">{icons[idx]}</span>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">
@@ -258,7 +259,7 @@ export default async function FormatPage({
 
                       {opening.result && (
                         <div>
-                          <p className="text-blue-600 dark:text-blue-400 font-medium">
+                          <p className="text-[color:var(--accent)] font-medium">
                             → {opening.result}
                           </p>
                         </div>
@@ -266,7 +267,7 @@ export default async function FormatPage({
 
                       {opening.benefit && (
                         <div>
-                          <p className="text-blue-600 dark:text-blue-400 font-medium">
+                          <p className="text-[color:var(--accent)] font-medium">
                             → {opening.benefit}
                           </p>
                         </div>
@@ -286,7 +287,7 @@ export default async function FormatPage({
               {format.openings.map((opening: any, idx: number) => {
                 const icons = ['🎙️', '👥', '🎭', '✨']
                 return (
-                  <div key={idx} className="border-l-4 border-purple-500 dark:border-purple-400 pl-6 py-3">
+                  <div key={idx} className="border-l-4 border-[color:var(--accent)] pl-6 py-3">
                     <div className="flex gap-4 items-start mb-3">
                       <span className="text-3xl flex-shrink-0">{icons[idx]}</span>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1">
@@ -320,7 +321,7 @@ export default async function FormatPage({
 
                       {opening.result && (
                         <div>
-                          <p className="text-purple-600 dark:text-purple-400 font-medium">
+                          <p className="text-[color:var(--accent)] font-medium">
                             → {opening.result}
                           </p>
                         </div>
@@ -340,7 +341,7 @@ export default async function FormatPage({
               {format.components.map((component, index) => (
                 <div
                   key={index}
-                  className="border-l-4 border-blue-500 dark:border-blue-400 pl-4 py-2"
+                  className="border-l-4 border-[color:var(--accent)] pl-4 py-2"
                 >
                   <div className="flex justify-between items-start mb-1">
                     <h3 className="font-semibold text-gray-900 dark:text-gray-100">
@@ -367,7 +368,7 @@ export default async function FormatPage({
             <ul className="space-y-2">
               {format.keyRules.map((rule: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-blue-500 dark:text-blue-400 mt-1">•</span>
+                  <span className="text-[color:var(--accent)] mt-1">•</span>
                   <span className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: convertMarkdown(rule) }} />
                 </li>
               ))}
@@ -381,7 +382,7 @@ export default async function FormatPage({
             <ul className="space-y-2">
               {format.keyRules.map((rule: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <span className="text-purple-500 dark:text-purple-400 mt-1">•</span>
+                  <span className="text-[color:var(--accent)] mt-1">•</span>
                   <span className="text-gray-700 dark:text-gray-300" dangerouslySetInnerHTML={{ __html: convertMarkdown(rule) }} />
                 </li>
               ))}
@@ -403,8 +404,8 @@ export default async function FormatPage({
           <Collapsible title={`Пример на тему: «${format.example.theme}»`} icon="🎬">
             <div className="space-y-4">
               {/* Opening */}
-              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+              <div className="bg-white dark:bg-neutral-900 rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 shadow-sm">
+                <h3 className="font-semibold text-[color:var(--accent)] mb-2">
                   Opening
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 text-sm">
@@ -421,13 +422,10 @@ export default async function FormatPage({
 
                   {/* Scenes within this beating */}
                   {beating.scenes && beating.scenes.map((scene: any, idx: number) => (
-                    <div key={idx} className={`rounded-lg p-4 border ${
-                      beating.number === 3
-                        ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                        : beating.number === 2
-                        ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800'
-                        : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
-                    }`}>
+                    <div
+                      key={idx}
+                      className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm"
+                    >
                       <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                         {scene.label}
                       </h3>
@@ -435,12 +433,12 @@ export default async function FormatPage({
                         {scene.description}
                       </p>
                       {scene.inspiration && (
-                        <p className="text-sm text-blue-600 dark:text-blue-400 italic mt-2">
+                        <p className="text-sm text-[color:var(--accent)] italic mt-2">
                           Inspiration: {scene.inspiration}
                         </p>
                       )}
                       {scene.connections && (
-                        <p className="text-sm text-green-600 dark:text-green-400 font-semibold mt-2">
+                        <p className="text-sm text-[color:var(--accent)] font-semibold mt-2">
                           → {scene.connections}
                         </p>
                       )}
@@ -456,8 +454,11 @@ export default async function FormatPage({
                     Group Games
                   </h3>
                   {format.example.groupGames.map((game: any, gameIdx: number) => (
-                    <div key={gameIdx} className="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
-                      <h4 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">
+                    <div
+                      key={gameIdx}
+                      className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm"
+                    >
+                      <h4 className="font-semibold text-[color:var(--accent)] mb-2">
                         {game.type} (после {game.after})
                       </h4>
                       <p className="text-gray-700 dark:text-gray-300 text-sm">
@@ -476,7 +477,7 @@ export default async function FormatPage({
           <Collapsible title={`Пример на тему: «${format.example.theme}»`} icon="🎬">
             <div className="space-y-4">
               {/* Monologist Info */}
-              <div className="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+              <div className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm">
                 <p className="text-sm text-gray-700 dark:text-gray-300">
                   <strong>Монологист:</strong> {format.example.monologist}
                 </p>
@@ -490,8 +491,8 @@ export default async function FormatPage({
                   </h3>
 
                   {/* Monologue */}
-                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-                    <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  <div className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm">
+                    <h4 className="font-semibold text-[color:var(--accent)] mb-2">
                       Монолог {round.number} ({round.monologue.duration})
                     </h4>
                     <p className="text-gray-700 dark:text-gray-300 text-sm mb-2">
@@ -506,7 +507,7 @@ export default async function FormatPage({
                           {round.monologue.keyDetails.map((detail: string, idx: number) => (
                             <span
                               key={idx}
-                              className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-0.5 rounded"
+                              className="text-xs px-2 py-0.5 rounded border border-[color:var(--accent)] text-[color:var(--accent)] bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_20%,black)]"
                             >
                               {detail}
                             </span>
@@ -521,7 +522,7 @@ export default async function FormatPage({
                     {round.scenes.map((scene: any, sceneIdx: number) => (
                       <div
                         key={sceneIdx}
-                        className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+                        className="rounded-lg p-3 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm"
                       >
                         <h5 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
                           Сцена {scene.number}
@@ -530,7 +531,7 @@ export default async function FormatPage({
                           {scene.description}
                         </p>
                         {scene.inspiration && (
-                          <p className="text-xs text-purple-600 dark:text-purple-400 italic mt-1">
+                          <p className="text-xs text-[color:var(--accent)] italic mt-1">
                             Inspiration: {scene.inspiration}
                           </p>
                         )}
@@ -542,7 +543,7 @@ export default async function FormatPage({
 
               {/* Themes Summary */}
               {format.example.themes && (
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                <div className="rounded-lg p-4 border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm">
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     <strong>Темы:</strong> {format.example.themes}
                   </p>
@@ -563,7 +564,7 @@ export default async function FormatPage({
                 {format.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm"
+                    className="px-3 py-1 rounded-full text-sm border border-[color:var(--accent)] text-[color:var(--accent)] bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_20%,black)]"
                   >
                     {skill}
                   </span>
@@ -591,7 +592,7 @@ export default async function FormatPage({
                     href={video.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-[color:var(--accent)] dark:hover:border-[color:var(--accent)] transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -612,7 +613,7 @@ export default async function FormatPage({
                           )}
                         </div>
                       </div>
-                      <span className="text-blue-500 dark:text-blue-400">→</span>
+                      <span className="text-[color:var(--accent)]">→</span>
                     </div>
                   </a>
                 ))
@@ -623,14 +624,14 @@ export default async function FormatPage({
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                    className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-[color:var(--accent)] dark:hover:border-[color:var(--accent)] transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">📹</span>
                         <span className="text-gray-900 dark:text-gray-100">{url}</span>
                       </div>
-                      <span className="text-blue-500 dark:text-blue-400">→</span>
+                      <span className="text-[color:var(--accent)]">→</span>
                     </div>
                   </a>
                 ))
@@ -650,7 +651,7 @@ export default async function FormatPage({
                     href={book.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                    className="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-[color:var(--accent)] dark:hover:border-[color:var(--accent)] transition-colors"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex-1">
@@ -664,7 +665,7 @@ export default async function FormatPage({
                           {book.description}
                         </p>
                       </div>
-                      <span className="text-blue-500 dark:text-blue-400 flex-shrink-0">→</span>
+                      <span className="text-[color:var(--accent)] flex-shrink-0">→</span>
                     </div>
                   </a>
                 ) : (
@@ -695,11 +696,11 @@ export default async function FormatPage({
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 dark:hover:border-blue-400 transition-colors"
+                  className="block p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-[color:var(--accent)] dark:hover:border-[color:var(--accent)] transition-colors"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-gray-900 dark:text-gray-100">{link.title}</span>
-                    <span className="text-blue-500 dark:text-blue-400">→</span>
+                    <span className="text-[color:var(--accent)]">→</span>
                   </div>
                 </a>
               ))}
@@ -709,7 +710,7 @@ export default async function FormatPage({
 
         {/* Notes */}
         {format.notes && (
-          <Collapsible title="Заметки" icon="💡" variant="warning">
+          <Collapsible title="Заметки" icon="💡" variant="accent">
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
               {format.notes}
             </p>

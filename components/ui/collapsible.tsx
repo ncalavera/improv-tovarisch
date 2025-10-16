@@ -7,7 +7,7 @@ interface CollapsibleProps {
   icon?: string
   children: ReactNode
   defaultOpen?: boolean
-  variant?: 'default' | 'primary' | 'warning'
+  variant?: 'default' | 'accent'
   className?: string
   contentClassName?: string
   headerClassName?: string
@@ -31,19 +31,18 @@ export function Collapsible({
 
   const variantStyles = {
     default: {
-      container: 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700',
-      header: 'hover:bg-gray-50 dark:hover:bg-gray-700/50',
-      title: 'text-gray-900 dark:text-gray-100',
+      container: 'bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700',
+      header: 'hover:bg-neutral-50 dark:hover:bg-neutral-800',
+      title: 'text-neutral-900 dark:text-neutral-100',
+      chevron: 'text-neutral-500 dark:text-neutral-300',
     },
-    primary: {
-      container: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
-      header: 'hover:bg-blue-100 dark:hover:bg-blue-800/30',
-      title: 'text-blue-900 dark:text-blue-100',
-    },
-    warning: {
-      container: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
-      header: 'hover:bg-yellow-100 dark:hover:bg-yellow-800/30',
-      title: 'text-yellow-900 dark:text-yellow-100',
+    accent: {
+      container:
+        'bg-[color:color-mix(in_srgb,var(--accent)_8%,white)] dark:bg-[color:color-mix(in_srgb,var(--accent)_16%,black)] border border-[color:var(--accent)]',
+      header:
+        'hover:bg-[color:color-mix(in_srgb,var(--accent)_12%,white)] dark:hover:bg-[color:color-mix(in_srgb,var(--accent)_24%,black)]',
+      title: 'text-[color:var(--accent)]',
+      chevron: 'text-[color:var(--accent)]',
     },
   }
 
@@ -53,7 +52,7 @@ export function Collapsible({
     ...classes: Array<string | null | undefined | false>
   ) => classes.filter(Boolean).join(' ')
 
-  const containerClasses = composeClasses('rounded-lg border shadow-sm', styles.container, className)
+  const containerClasses = composeClasses('rounded-lg shadow-sm', styles.container, className)
 
   const headerClasses = composeClasses(
     'w-full px-6 py-4 flex items-center justify-between transition-colors',
@@ -66,7 +65,7 @@ export function Collapsible({
   const chevronClasses = composeClasses(
     'w-5 h-5 transition-transform',
     isOpen ? 'rotate-180' : '',
-    styles.title,
+    styles.chevron,
     chevronClassName,
   )
 
