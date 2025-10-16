@@ -425,21 +425,6 @@ export function FormatsExplorer({ formats }: Props) {
                   </div>
                 )}
 
-                {isStructuredFormat(format) && format.skills.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-1">
-                    {format.skills.slice(0, 3).map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                    {format.skills.length > 3 && (
-                      <span className="text-xs text-gray-500">+{format.skills.length - 3}</span>
-                    )}
-                  </div>
-                )}
               </div>
             </Link>
           )
