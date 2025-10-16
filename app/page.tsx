@@ -37,6 +37,12 @@ export default function Home() {
                 Видео
               </Link>
               <Link
+                href="/research/ux-ui"
+                className="inline-flex items-center justify-center rounded-full border border-indigo-500 px-5 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-900/40"
+              >
+                UX/UI референсы
+              </Link>
+              <Link
                 href="/prototype/armando"
                 className="inline-flex items-center justify-center rounded-full border border-purple-500 px-5 py-2 text-sm font-semibold text-purple-600 transition hover:bg-purple-50 dark:text-purple-300 dark:hover:bg-purple-900/40"
               >
