@@ -238,12 +238,7 @@ export function FormatsExplorer({ formats }: Props) {
 
   return (
     <div>
-      <div className="mb-8">
-        <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Все форматы</h2>
-        <p className="text-gray-600 dark:text-gray-400">Найдено форматов: {sortedFormats.length}</p>
-      </div>
-
-      <div className="bg-white/80 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-8 shadow-sm">
+      <div className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-800/50 dark:to-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 mb-8 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <label className="flex flex-col gap-1 text-sm min-w-[220px]">
@@ -256,7 +251,7 @@ export function FormatsExplorer({ formats }: Props) {
                 onChange={(event) => setSearchQuery(event.target.value)}
                 type="text"
                 placeholder="Введите название"
-                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               />
             </label>
 
@@ -268,7 +263,7 @@ export function FormatsExplorer({ formats }: Props) {
               <select
                 value={formCategoryFilter}
                 onChange={(event) => setFormCategoryFilter(event.target.value as 'all' | FormatCategory)}
-                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               >
                 <option value="all">Все формы</option>
                 <option value="long-form">Длинная форма</option>
@@ -285,7 +280,7 @@ export function FormatsExplorer({ formats }: Props) {
               <select
                 value={lengthFilter}
                 onChange={(event) => setLengthFilter(event.target.value as LengthFilter)}
-                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               >
                 <option value="all">Любая</option>
                 <option value="upTo15">До 15 минут</option>
@@ -304,7 +299,7 @@ export function FormatsExplorer({ formats }: Props) {
                 onChange={(event) =>
                   setPlayersFilter(event.target.value === 'all' ? 'all' : Number(event.target.value))
                 }
-                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               >
                 <option value="all">Любое</option>
                 {playerOptions.map((option) => (
@@ -326,7 +321,7 @@ export function FormatsExplorer({ formats }: Props) {
                   setSortPair(value)
                   setSortReversed(false)
                 }}
-                className="rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
               >
                 <option value="default">По умолчанию</option>
                 <option value="difficulty">
@@ -349,7 +344,7 @@ export function FormatsExplorer({ formats }: Props) {
                 <button
                   type="button"
                   onClick={() => setSortReversed((prev) => !prev)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                   aria-label="Поменять направление сортировки"
                   title="Поменять направление сортировки"
                 >
@@ -361,7 +356,7 @@ export function FormatsExplorer({ formats }: Props) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {sortedFormats.map((format) => {
           const warmup = isWarmup(format)
           const summary = warmup
@@ -370,7 +365,7 @@ export function FormatsExplorer({ formats }: Props) {
 
           return (
             <Link key={format.id} href={`/formats/${format.id}`} className="group">
-              <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700 h-full transform transition-transform duration-200 ease-out group-hover:scale-[1.02] group-hover:shadow-md">
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-200 dark:border-gray-700 h-full transform transition-all duration-300 ease-out group-hover:scale-[1.02] group-hover:shadow-lg group-hover:border-blue-300 dark:group-hover:border-blue-600">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex flex-wrap gap-2">
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 dark:bg-slate-900/60 dark:text-slate-200">
@@ -403,7 +398,7 @@ export function FormatsExplorer({ formats }: Props) {
                 </h3>
 
                 {summary && (
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{summary}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">{summary}</p>
                 )}
 
                 {isStructuredFormat(format) ? (
@@ -432,8 +427,9 @@ export function FormatsExplorer({ formats }: Props) {
       </div>
 
       {sortedFormats.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-16 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700">
           <p className="text-gray-500 dark:text-gray-400 text-lg">Форматы не найдены</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Попробуйте изменить фильтры</p>
         </div>
       )}
     </div>
