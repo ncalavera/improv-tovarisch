@@ -8,67 +8,50 @@ export default function Home() {
   const formats = getFormats()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      {/* Header */}
-      <header className="border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-              Импров Товарищ
-              <span className="inline-flex items-center justify-center rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-300 p-1">
-                <StickFigureIcon className="h-8 w-8" />
-                <span className="sr-only">Улыбающийся человечек</span>
-              </span>
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
-              Библиотека импровизационных форматов
-            </p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center rounded-full border border-blue-500 bg-blue-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
-              >
-                Форматы
-              </Link>
-              <Link
-                href="/videos"
-                className="inline-flex items-center justify-center rounded-full border border-blue-500 px-5 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-900/40"
-              >
-                Видео
-              </Link>
-              <Link
-                href="/research/ux-ui"
-                className="inline-flex items-center justify-center rounded-full border border-indigo-500 px-5 py-2 text-sm font-semibold text-indigo-600 transition hover:bg-indigo-50 dark:text-indigo-300 dark:hover:bg-indigo-900/40"
-              >
-                UX/UI референсы
-              </Link>
-              <Link
-                href="/prototype/armando"
-                className="inline-flex items-center justify-center rounded-full border border-purple-500 px-5 py-2 text-sm font-semibold text-purple-600 transition hover:bg-purple-50 dark:text-purple-300 dark:hover:bg-purple-900/40"
-              >
-                🎙️ Армандо — прототип
-              </Link>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 font-sans selection:bg-blue-100 dark:selection:bg-blue-900/30">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:bg-[url('/grid-dark.svg')]"></div>
+        <div className="relative max-w-5xl mx-auto px-4 pt-20 pb-16 sm:pt-24 sm:pb-20 text-center">
+          <div className="flex justify-center mb-6">
+            <div className="p-3 bg-white dark:bg-gray-900 rounded-2xl shadow-xl shadow-blue-500/10 ring-1 ring-gray-200 dark:ring-gray-800">
+              <StickFigureIcon className="h-12 w-12 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
+            Импров Товарищ
+          </h1>
+
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Большая библиотека импровизационных форматов. <br className="hidden sm:block" />
+            Игры, упражнения и длинные формы для вашей команды.
+          </p>
         </div>
-      </header>
+      </div>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <section aria-labelledby="formats-heading" className="space-y-6">
-          <div className="flex flex-col gap-2">
-            <h2 id="formats-heading" className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              Форматы и разминки
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm ring-1 ring-gray-200 dark:ring-gray-800 p-6 sm:p-8">
+          <div className="mb-8 border-b border-gray-100 dark:border-gray-800 pb-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Коллекция форматов
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              Исследуйте коллекцию импровизационных игр, упражнений и длинных форм, упорядоченных по сложности, длительности и
-              размеру команды.
+            <p className="text-gray-500 dark:text-gray-400">
+              Используйте фильтры, чтобы найти идеальный формат для вашей репетиции или шоу.
             </p>
           </div>
 
           <FormatsExplorer formats={formats} />
-        </section>
+        </div>
       </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>© {new Date().getFullYear()} Импров Товарищ. Создано для сообщества.</p>
+        </div>
+      </footer>
     </div>
   )
 }
